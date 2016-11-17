@@ -1,2 +1,2 @@
-# NationBuilder.Client
+# NationBuilderConnect
 A C# client for NationBuilder.
