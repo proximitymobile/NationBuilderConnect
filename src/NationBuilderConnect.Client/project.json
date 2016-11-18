@@ -1,20 +1,21 @@
-﻿{
+{
     "title": "NationBuilderConnect.Client",
     "authors": [ "Kevin Evans" ],
     "description": "A simple .NET NationBuilder client",
-    "version": "1.0.0-*",
+    "version": "1.0.0",
     "packOptions": {
         "owners": [ "Proximity Mobile" ],
         "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
         "licenseUrl": "https://github.com/proximitymobile/NationBuilderConnect/blob/master/LICENSE",
         "releaseNotes": "https://github.com/proximitymobile/NationBuilderConnect/releases",
         "requireLicenseAcceptance": false,
-        "tags": [ "nationbuilder", "client", "pcl", "connect" ]
+        "tags": [ "nationbuilder", "client", "connect" ]
     },
     "buildOptions": {
         "xmlDoc": true
     },
     "dependencies": {
+        "NationBuilderConnect.Model": "1.0.0",
         "Newtonsoft.Json": "9.0.1"
     },
     "frameworks": {
@@ -31,16 +32,16 @@
             "buildOptions": {
                 "define": [ "NET45" ]
             },
-            "dependencies": {
-                "Microsoft.Net.Http": "2.2.29"
+            "frameworkAssemblies": {
+                "System.Net.Http": "4.0.0.0"
             }
         },
         "net451": {
             "buildOptions": {
                 "define": [ "NET451" ]
             },
-            "dependencies": {
-                "Microsoft.Net.Http": "2.2.29"
+            "frameworkAssemblies": {
+                "System.Net.Http": "4.0.0.0"
             }
         },
         ".NETPortable,Version=4.5,Profile=Profile259": {
@@ -65,6 +66,18 @@
                 "NETStandard.Library": "1.6.0",
                 "Microsoft.CSharp": "4.0.1",
                 "System.Reflection.TypeExtensions": "4.1.0"
+            }
+        },
+        "netcoreapp1.5": {
+            "buildOptions": {
+                "define": [ "NETCORE" ]
+            },
+            "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "type": "platform",
+                    "version": "1.0.0"
+                },
+                "System.Net.Http": "4.3.0"
             }
         }
     }

@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using NationBuilderConnect.Client.Services.Parameters;
-using NationBuilderConnect.Client.Utilities.Extensions;
+using System.Reflection;
+using NationBuilderConnect.Client.Model;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Utilities
 {
+    /// <inheritDoc/>
     public class UrlProvider : IUrlProvider
     {
         /// <inheritDoc/>
-        public virtual string GetV1PersonIndexUrl(int pageSize, PagingTokens pagingTokens)
+        public virtual string GetV1PersonIndexUrl(short pageSize, PagingTokens pagingTokens)
         {
             var queryValues = CreateQueryStringValues(pageSize, pagingTokens);
             return "api/v1/people" + queryValues.ToString(true);
@@ -37,7 +40,7 @@ namespace NationBuilderConnect.Client.Utilities
         }
 
         /// <inheritDoc/>
-        public string GetV1PersonSearchUrl(int pageSize, PagingTokens pagingTokens, SearchPeopleParameters parameters)
+        public string GetV1PersonSearchUrl(short pageSize, PagingTokens pagingTokens, SearchPeopleParameters parameters)
         {
             var queryValues = CreateQueryStringValues(pageSize, pagingTokens, parameters);
             PopulateQueryStringWithCustomValues(queryValues, parameters.CustomValues);
@@ -45,7 +48,7 @@ namespace NationBuilderConnect.Client.Utilities
         }
 
         /// <inheritDoc/>
-        public string GetV1PersonNearbyUrl(int pageSize, PagingTokens pagingTokens, GetNearbyPeopleParameters parameters)
+        public string GetV1PersonNearbyUrl(short pageSize, PagingTokens pagingTokens, GetNearbyPeopleParameters parameters)
         {
             var queryValues = CreateQueryStringValues(pageSize, pagingTokens, parameters);
             return "api/v1/people/nearby" + queryValues.ToString(true);
@@ -72,7 +75,7 @@ namespace NationBuilderConnect.Client.Utilities
         /// <inheritDoc/>
         public string GetV1PersonCreateUrl()
         {
-            return $"api/v1/people";
+            return "api/v1/people";
         }
 
         /// <inheritDoc/>
@@ -106,21 +109,21 @@ namespace NationBuilderConnect.Client.Utilities
         }
 
         /// <inheritDoc/>
-        public string GetV1ContactIndexUrl(int personId, int pageSize, PagingTokens pagingTokens)
+        public string GetV1ContactIndexUrl(int personId, short pageSize, PagingTokens pagingTokens)
         {
             var queryValues = CreateQueryStringValues(pageSize, pagingTokens);
             return $"api/v1/people/{personId}/contacts" + queryValues.ToString(true);
         }
 
         /// <inheritDoc/>
-        public string GetV1ListIndexUrl(int pageSize, PagingTokens pagingTokens)
+        public string GetV1ListIndexUrl(short pageSize, PagingTokens pagingTokens)
         {
             var queryValues = CreateQueryStringValues(pageSize, pagingTokens);
             return "api/v1/lists" + queryValues.ToString(true);
         }
 
         /// <inheritDoc/>
-        public string GetV1ListPeopleIndexUrl(int listId, int pageSize, PagingTokens pagingTokens)
+        public string GetV1ListPeopleIndexUrl(int listId, short pageSize, PagingTokens pagingTokens)
         {
             var queryValues = CreateQueryStringValues(pageSize, pagingTokens);
             return $"api/v1/lists/{listId}/people" + queryValues.ToString(true);
@@ -209,7 +212,7 @@ namespace NationBuilderConnect.Client.Utilities
             return $"https://{nationSlug}.nationbuilder.com";
         }
 
-        private static QueryStringValues CreateQueryStringValues(int? pageSize = null,
+        private static QueryStringValues CreateQueryStringValues(short? pageSize = null,
             PagingTokens pagingTokens = null, object parameters = null)
         {
             var queryValues = new QueryStringValues()
@@ -234,7 +237,7 @@ namespace NationBuilderConnect.Client.Utilities
             foreach (var property in properties)
             {
                 var attribute = property.GetAttribute<QueryStringParameterAttribute>();
-                var name = attribute?.Name;
+                var name = attribute?.Key;
                 if (string.IsNullOrWhiteSpace(name)) continue;
                 var value = property.GetValue(parameters, null);
                 if (value == null) continue;

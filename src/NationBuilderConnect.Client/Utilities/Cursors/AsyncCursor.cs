@@ -24,12 +24,20 @@ using System.Threading.Tasks;
 
 namespace NationBuilderConnect.Client.Utilities.Cursors
 {
+    /// <inheritDoc />
     public abstract class AsyncCursor<TDocument> : IAsyncCursor<TDocument>
     {
         private bool _isDisposed;
 
+        /// <inheritDoc />
+        public int? Limit { get; protected set; }
+
+        /// <summary>
+        ///     The current element
+        /// </summary>
         protected abstract TDocument CurrentProtected { get; }
 
+        /// <inheritDoc />
         public bool MoveNext(CancellationToken cancellationToken = default(CancellationToken))
         {
             ThrowIfDisposed();
@@ -37,6 +45,7 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             return MoveNextProtected(cancellationToken);
         }
 
+        /// <inheritDoc />
         public Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             ThrowIfDisposed();
@@ -44,8 +53,17 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             return MoveNextProtectedAsync(cancellationToken);
         }
 
+        /// <inheritDoc />
+        public virtual IAsyncCursor<TDocument> SetLimit(int limit)
+        {
+            Limit = limit;
+            return this;
+        }
+
+        /// <inheritDoc />
         public bool HasBeenUsed { get; private set; }
 
+        /// <inheritDoc />
         public TDocument Current
         {
             get
@@ -55,13 +73,24 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             }
         }
 
+        /// <inheritDoc />
         public virtual void Dispose()
         {
             _isDisposed = true;
         }
 
+        /// <summary>
+        ///     Moves to the next element syncronously
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>Whether any more elements are available</returns>
         protected abstract bool MoveNextProtected(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        ///     Moves to the next element asyncronously
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>Whether any more elements are available</returns>
         protected abstract Task<bool> MoveNextProtectedAsync(
             CancellationToken cancellationToken = default(CancellationToken));
 

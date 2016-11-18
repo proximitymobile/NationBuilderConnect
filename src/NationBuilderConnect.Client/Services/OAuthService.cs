@@ -1,9 +1,14 @@
 ﻿using System.Threading.Tasks;
+using NationBuilderConnect.Client.Model.Requests;
 using NationBuilderConnect.Client.Utilities;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Services
 {
-    public class OAuthService : NationBuilderService
+    /// <summary>
+    ///     Access to the NationBuilder oauth API methods
+    /// </summary>
+    public class OAuthService : NationBuilderApiService
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="OAuthService" /> class
@@ -27,7 +32,7 @@ namespace NationBuilderConnect.Client.Services
         public async Task<OAuthAccessToken> GetAccessTokenAsync(string clientId, string clientSecret,
             string redirectUri, string authorizationCode)
         {
-            var url = Connect.UrlProvider.GetOAuthTokenUrl();
+            var url = ConnectClient.UrlProvider.GetOAuthTokenUrl();
 
             var content = new OAuthAccessTokenRequest(
                 clientId, clientSecret, redirectUri, authorizationCode,

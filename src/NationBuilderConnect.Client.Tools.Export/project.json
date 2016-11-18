@@ -1,0 +1,84 @@
+﻿{
+    "title": "NationBuilderConnect.Client.Tools.Export",
+    "authors": [ "Kevin Evans" ],
+    "description": "Tools for working with NationBuilder exports using NationBuilder.Connect.Client",
+    "version": "1.0.0-*",
+    "packOptions": {
+        "owners": [ "Proximity Mobile" ],
+        "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
+        "licenseUrl": "https://github.com/proximitymobile/NationBuilderConnect/blob/master/LICENSE",
+        "releaseNotes": "https://github.com/proximitymobile/NationBuilderConnect/releases",
+        "requireLicenseAcceptance": false,
+        "tags": [ "nationbuilder", "client", "pcl", "connect" ]
+    },
+    "buildOptions": {
+        "xmlDoc": true
+    },
+    "dependencies": {
+        "CsvHelper": "2.16.3",
+        "NationBuilderConnect.Client": "1.0.0-*"
+    },
+    "frameworks": {
+        "net40": {
+            "buildOptions": {
+                "define": [ "NET40" ]
+            },
+            "dependencies": {
+                "Microsoft.Net.Http": "2.2.29",
+                "Microsoft.Bcl.Async": "1.0.168"
+            }
+        },
+        "net45": {
+            "buildOptions": {
+                "define": [ "NET45" ]
+            },
+            "frameworkAssemblies": {
+                "System.Net.Http": "4.0.0.0"
+            }
+        },
+        "net451": {
+            "buildOptions": {
+                "define": [ "NET451" ]
+            },
+            "frameworkAssemblies": {
+                "System.Net.Http": "4.0.0.0"
+            }
+        },
+        ".NETPortable,Version=4.5,Profile=Profile259": {
+            "buildOptions": {
+                "define": [ "PCL" ]
+            },
+            "frameworkAssemblies": {
+                "mscorlib": "",
+                "System.Core": "",
+                "System": "",
+                "System.Net.Primitives": ""
+            },
+            "dependencies": {
+                "Microsoft.Net.Http": "2.2.29"
+            }
+        },
+        "netstandard1.3": {
+            "buildOptions": {
+                "define": [ "NETSTANDARD" ]
+            },
+            "dependencies": {
+                "NETStandard.Library": "1.6.0",
+                "Microsoft.CSharp": "4.0.1",
+                "System.Reflection.TypeExtensions": "4.1.0"
+            }
+        },
+        "netcoreapp1.5": {
+            "buildOptions": {
+                "define": [ "NETCORE" ]
+            },
+            "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "type": "platform",
+                    "version": "1.0.0"
+                },
+                "System.Net.Http": "4.3.0"
+            }
+        }
+    }
+}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using NationBuilderConnect.Client.Utilities.Extensions;
+using NationBuilderConnect.Client.Utilities;
 
 namespace NationBuilderConnect.Client.Model
 {
@@ -54,7 +54,7 @@ namespace NationBuilderConnect.Client.Model
         /// </summary>
         public TimeSpan GetResetsIn()
         {
-            var resetAtAsRemoteTime = Reset.AsUnixTimeToDateTime();
+            var resetAtAsRemoteTime = Reset.ConvertUnixTimeToDateTime();
             var resetsIn = resetAtAsRemoteTime - RequestedAt;
             return resetsIn > MinResetInterval ? resetsIn : MinResetInterval;
         }
@@ -64,6 +64,7 @@ namespace NationBuilderConnect.Client.Model
         /// </summary>
         /// <param name="response">The response from the server</param>
         /// <returns>The rate limit details</returns>
+        [CLSCompliant(false)]
         public static ApiRateLimitDetails CreateFromResponse(HttpResponseMessage response)
         {
             IEnumerable<string> limitRaws, remainingRaws, resetRaws, dateRaws;

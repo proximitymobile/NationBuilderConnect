@@ -1,11 +1,17 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using NationBuilderConnect.Client.Model.Requests;
+using NationBuilderConnect.Client.Model.Responses;
 using NationBuilderConnect.Client.Services.Parameters;
 using NationBuilderConnect.Client.Utilities;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Services
 {
-    public class ExportService : NationBuilderService
+    /// <summary>
+    ///     Access to the NationBuilder Exports API
+    /// </summary>
+    public class ExportService : NationBuilderApiService
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExportService" /> class

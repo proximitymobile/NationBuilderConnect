@@ -4,6 +4,9 @@ using NationBuilderConnect.Client.Utilities;
 
 namespace NationBuilderConnect.Client.Services.Parameters
 {
+    /// <summary>
+    ///     The values on which to search for a person
+    /// </summary>
     public class SearchPeopleParameters
     {
         /// <summary>

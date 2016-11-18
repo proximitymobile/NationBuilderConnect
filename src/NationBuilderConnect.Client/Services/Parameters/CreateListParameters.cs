@@ -2,6 +2,9 @@
 
 namespace NationBuilderConnect.Client.Services.Parameters
 {
+    /// <summary>
+    ///     The values used to create a list
+    /// </summary>
     public class CreateListParameters
     {
         /// <summary>

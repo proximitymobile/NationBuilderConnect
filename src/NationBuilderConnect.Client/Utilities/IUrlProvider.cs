@@ -1,7 +1,12 @@
+using NationBuilderConnect.Client.Model;
 using NationBuilderConnect.Client.Services.Parameters;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Utilities
 {
+    /// <summary>
+    ///     Provides URLs to API service endpoints
+    /// </summary>
     public interface IUrlProvider
     {
         /// <summary>
@@ -32,7 +37,7 @@ namespace NationBuilderConnect.Client.Utilities
         /// <param name="pageSize">The number of items to return from the server per page of results</param>
         /// <param name="pagingTokens">Paging values</param>
         /// <returns>The relative URL for the people index method</returns>
-        string GetV1PersonIndexUrl(int pageSize, PagingTokens pagingTokens);
+        string GetV1PersonIndexUrl(short pageSize, PagingTokens pagingTokens);
 
         /// <summary>
         ///     Gets the relative URL for the people count method
@@ -62,7 +67,7 @@ namespace NationBuilderConnect.Client.Utilities
         /// <param name="pagingTokens">Paging values</param>
         /// <param name="parameters">The values to search on</param>
         /// <returns>Tthe relative URL for the people search method</returns>
-        string GetV1PersonSearchUrl(int pageSize, PagingTokens pagingTokens, SearchPeopleParameters parameters);
+        string GetV1PersonSearchUrl(short pageSize, PagingTokens pagingTokens, SearchPeopleParameters parameters);
 
         /// <summary>
         ///     Gets the relative URL for the people nearby method
@@ -71,7 +76,7 @@ namespace NationBuilderConnect.Client.Utilities
         /// <param name="pagingTokens">Paging values</param>
         /// <param name="parameters">The values to search on</param>
         /// <returns>Tthe relative URL for the people nearby method</returns>
-        string GetV1PersonNearbyUrl(int pageSize, PagingTokens pagingTokens, GetNearbyPeopleParameters parameters);
+        string GetV1PersonNearbyUrl(short pageSize, PagingTokens pagingTokens, GetNearbyPeopleParameters parameters);
 
         /// <summary>
         ///     Gets the relative URL for the people add tags method
@@ -140,7 +145,7 @@ namespace NationBuilderConnect.Client.Utilities
         /// <param name="pageSize">The number of items to return from the server per page of results</param>
         /// <param name="pagingTokens">Paging values</param>
         /// <returns>The relative URL for the contact index method</returns>
-        string GetV1ContactIndexUrl(int personId, int pageSize, PagingTokens pagingTokens);
+        string GetV1ContactIndexUrl(int personId, short pageSize, PagingTokens pagingTokens);
 
         /// <summary>
         ///     Gets the relative URL for the custom list index method
@@ -148,7 +153,7 @@ namespace NationBuilderConnect.Client.Utilities
         /// <param name="pageSize">The number of items to return from the server per page of results</param>
         /// <param name="pagingTokens">Paging values</param>
         /// <returns>The relative URL for the custom list index method</returns>
-        string GetV1ListIndexUrl(int pageSize, PagingTokens pagingTokens);
+        string GetV1ListIndexUrl(short pageSize, PagingTokens pagingTokens);
 
         /// <summary>
         ///     Gets the relative URL for the custom list people index method
@@ -157,7 +162,7 @@ namespace NationBuilderConnect.Client.Utilities
         /// <param name="pageSize">The number of items to return from the server per page of results</param>
         /// <param name="pagingTokens">Paging values</param>
         /// <returns>The relative URL for the custom list people index method</returns>
-        string GetV1ListPeopleIndexUrl(int listId, int pageSize, PagingTokens pagingTokens);
+        string GetV1ListPeopleIndexUrl(int listId, short pageSize, PagingTokens pagingTokens);
 
         /// <summary>
         ///     Gets the relative URL for the custom list create method

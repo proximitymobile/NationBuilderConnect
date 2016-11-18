@@ -2,14 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NationBuilderConnect.Client.Utilities.Extensions;
-using NationBuilderConnect.Client.Utilities.Json.Resolvers;
+using NationBuilderConnect.Client.Model;
+using NationBuilderConnect.Client.Model.Requests;
+using NationBuilderConnect.Client.Utilities.Json;
 using Newtonsoft.Json;
 
 namespace NationBuilderConnect.Client.Utilities
 {
+    /// <summary>
+    ///     Serializes the changes to an ITracksChanges as JSON
+    /// </summary>
     public class ObjectChangesJsonSerializer
     {
+        /// <summary>
+        ///     Serializes the changes to an ITracksChanges as JSON
+        /// </summary>
+        /// <typeparam name="T">The object type</typeparam>
+        /// <param name="initialEntity">The unchanged entity</param>
+        /// <param name="changedEntity">The changed entity</param>
+        /// <returns>The changes serialized to JSON</returns>
         public static string SerializeChangesToJson<T>(T initialEntity, T changedEntity) where T : class, ITracksChanges
         {
             Ensure.IsNotNull(changedEntity, nameof(changedEntity));
@@ -30,6 +41,7 @@ namespace NationBuilderConnect.Client.Utilities
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 ContractResolver = jsonResolver
             };
+
             return JsonConvert.SerializeObject(changedEntity, jsonSettings);
         }
 
@@ -91,7 +103,7 @@ namespace NationBuilderConnect.Client.Utilities
         private static ITracksChanges GetDefaultTracksChangesInstance(Type type)
         {
             if (type == typeof (PersonUpdate)) return new PersonUpdate();
-            if (type == typeof (PersonAddressUpdate)) return new PersonAddressUpdate();
+            if (type == typeof (AddressUpdate)) return new AddressUpdate();
             if (type == typeof (UpdatePersonRequest)) return new UpdatePersonRequest(null);
             if (type == typeof (CreatePersonRequest)) return new CreatePersonRequest(null);
             throw new InvalidOperationException("Unknown trackable type");

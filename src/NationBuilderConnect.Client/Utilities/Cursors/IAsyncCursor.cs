@@ -24,7 +24,11 @@ using System.Threading.Tasks;
 
 namespace NationBuilderConnect.Client.Utilities.Cursors
 {
-    public interface IAsyncCursor<out TDocument> : IDisposable
+    /// <summary>
+    ///     Allows iterating a collection of items asynconously
+    /// </summary>
+    /// <typeparam name="TItem">The type of element in the collection</typeparam>
+    public interface IAsyncCursor<out TItem> : IDisposable
     {
         /// <summary>
         ///     Whether or not any records have been read from this cursor
@@ -34,7 +38,12 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
         /// <summary>
         ///     The current element
         /// </summary>
-        TDocument Current { get; }
+        TItem Current { get; }
+
+        /// <summary>
+        ///     The total number of records to retrieve. If null then all records are retrieved.
+        /// </summary>
+        int? Limit { get; }
 
         /// <summary>
         ///     Moves to the next element syncronously
@@ -49,5 +58,11 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>Whether any more elements are available</returns>
         Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        ///     Sets the total number of records to retrieve
+        /// </summary>
+        /// <param name="limit">The number of records to retrieve</param>
+        IAsyncCursor<TItem> SetLimit(int limit);
     }
 }

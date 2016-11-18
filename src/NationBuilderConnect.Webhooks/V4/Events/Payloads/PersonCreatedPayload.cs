@@ -1,4 +1,4 @@
-﻿using NationBuilderConnect.Webhooks.V4.Entities;
+﻿using NationBuilderConnect.Model;
 using Newtonsoft.Json;
 
 namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
@@ -9,7 +9,7 @@ namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
     public class PersonCreatedPayload : INationBuilderEventPayload
     {
         /// <summary>
-        ///     The person that was created or updated
+        ///     The person that was created
         /// </summary>
         [JsonProperty("person")]
         public Person Person { get; private set; }

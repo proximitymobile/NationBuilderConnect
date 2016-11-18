@@ -1,20 +1,21 @@
-﻿{
+{
     "title": "NationBuilderConnect.Webhooks",
     "authors": [ "Kevin Evans" ],
     "description": ".NET library for use with NationBuilder webhooks",
-    "version": "1.0.0-*",
+    "version": "1.0.0",
     "packOptions": {
         "owners": [ "Proximity Mobile" ],
         "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
         "licenseUrl": "https://github.com/proximitymobile/NationBuilderConnect/blob/master/LICENSE",
         "releaseNotes": "https://github.com/proximitymobile/NationBuilderConnect/releases",
         "requireLicenseAcceptance": false,
-        "tags": [ "nationbuilder", "client", "pcl", "connect" ]
+        "tags": [ "nationbuilder", "client", "connect", "webhook" ]
     },
     "buildOptions": {
         "xmlDoc": true
     },
     "dependencies": {
+        "NationBuilderConnect.Model": "1.0.0",
         "Newtonsoft.Json": "9.0.1"
     },
     "frameworks": {

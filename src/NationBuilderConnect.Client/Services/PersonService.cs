@@ -2,13 +2,20 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using NationBuilderConnect.Client.Model;
+using NationBuilderConnect.Client.Model.Requests;
+using NationBuilderConnect.Client.Model.Responses;
 using NationBuilderConnect.Client.Services.Parameters;
 using NationBuilderConnect.Client.Utilities;
 using NationBuilderConnect.Client.Utilities.Cursors;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Services
 {
-    public class PersonService : NationBuilderService
+    /// <summary>
+    ///     Access to the NationBuilder People API
+    /// </summary>
+    public class PersonService : NationBuilderApiService
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="PersonService" /> class
@@ -21,14 +28,14 @@ namespace NationBuilderConnect.Client.Services
         {
         }
 
-        private async Task<ResultsPage<AbbreviatedPerson>> GetIndexPageAsync(int pageSize, PagingTokens pagingTokens,
+        private async Task<ResultsPage<AbbreviatedPerson>> GetIndexPageAsync(short pageSize, PagingTokens pagingTokens,
             CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1PersonIndexUrl(pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<AbbreviatedPerson>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<AbbreviatedPerson> GetIndexPage(int pageSize, PagingTokens pagingTokens,
+        private ResultsPage<AbbreviatedPerson> GetIndexPage(short pageSize, PagingTokens pagingTokens,
             CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1PersonIndexUrl(pageSize, pagingTokens);
@@ -39,11 +46,10 @@ namespace NationBuilderConnect.Client.Services
         ///     Retrieves the list of people in a nation. The results are of type <see cref="AbbreviatedPerson" />, to get a full
         ///     represenation of a person (<see cref="Person" />) use the Show/ShowAsync methods.
         /// </summary>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the people either syncronously or asyncronously</returns>
-        public IAsyncCursor<AbbreviatedPerson> GetIndex(int pageSize)
+        public IAsyncCursor<AbbreviatedPerson> GetIndex(short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
             return new AsyncPagedEntityCursor<AbbreviatedPerson>(GetIndexAsPages(pageSize));
         }
 
@@ -52,12 +58,13 @@ namespace NationBuilderConnect.Client.Services
         ///     <see cref="AbbreviatedPerson" />, to get a full represenation of a person (<see cref="Person" />) use the
         ///     Show/ShowAsync methods.
         /// </summary>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the people either syncronously or asyncronously</returns>
-        public IAsyncCursor<ResultsPage<AbbreviatedPerson>> GetIndexAsPages(int pageSize)
+        public IAsyncCursor<ResultsPage<AbbreviatedPerson>> GetIndexAsPages(short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
-            return new AsyncPageCursor<AbbreviatedPerson>(GetIndexPage, GetIndexPageAsync, pageSize);
+            Ensure.IsValidExplicitPageSize(pageSize);
+            var actualPageSize = GetPageSize(pageSize);
+            return new AsyncPageCursor<AbbreviatedPerson>(GetIndexPage, GetIndexPageAsync, actualPageSize);
         }
 
         /// <summary>
@@ -170,14 +177,14 @@ namespace NationBuilderConnect.Client.Services
             return result.Payload;
         }
 
-        private async Task<ResultsPage<AbbreviatedPerson>> GetSearchPageAsync(int pageSize, PagingTokens pagingTokens,
+        private async Task<ResultsPage<AbbreviatedPerson>> GetSearchPageAsync(short pageSize, PagingTokens pagingTokens,
             SearchPeopleParameters parameters, CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1PersonSearchUrl(pageSize, pagingTokens, parameters);
             return (await GetJsonAsync<ResultsPage<AbbreviatedPerson>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<AbbreviatedPerson> GetSearchPage(int pageSize, PagingTokens pagingTokens,
+        private ResultsPage<AbbreviatedPerson> GetSearchPage(short pageSize, PagingTokens pagingTokens,
             SearchPeopleParameters parameters, CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1PersonSearchUrl(pageSize, pagingTokens, parameters);
@@ -188,82 +195,80 @@ namespace NationBuilderConnect.Client.Services
         ///     Searches for people with specific attributes as pages of results
         /// </summary>
         /// <param name="parameters">The attributes used to search for people</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the pages of people either syncronously or asyncronously</returns>
         public IAsyncCursor<ResultsPage<AbbreviatedPerson>> SearchAsPages(SearchPeopleParameters parameters,
-            int pageSize)
+            short? pageSize = null)
         {
             Ensure.IsNotNull(parameters, nameof(parameters));
-            Ensure.IsValidPageSize(pageSize);
+            Ensure.IsValidExplicitPageSize(pageSize);
+
+            var actualPageSize = GetPageSize(pageSize);
 
             return new AsyncPageCursor<AbbreviatedPerson>(
-                (size, tokens, token) => GetSearchPage(pageSize, tokens, parameters, token),
-                async (size, tokens, token) => await GetSearchPageAsync(pageSize, tokens, parameters, token),
-                pageSize);
+                (size, tokens, token) => GetSearchPage(actualPageSize, tokens, parameters, token),
+                async (size, tokens, token) => await GetSearchPageAsync(actualPageSize, tokens, parameters, token),
+                actualPageSize);
         }
 
         /// <summary>
         ///     Searches for people with specific attributes
         /// </summary>
         /// <param name="parameters">The attributes used to search for people</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the people either syncronously or asyncronously</returns>
-        public IAsyncCursor<AbbreviatedPerson> Search(SearchPeopleParameters parameters, int pageSize)
+        public IAsyncCursor<AbbreviatedPerson> Search(SearchPeopleParameters parameters, short? pageSize = null)
         {
-            Ensure.IsNotNull(parameters, nameof(parameters));
-            Ensure.IsValidPageSize(pageSize);
-
             return new AsyncPagedEntityCursor<AbbreviatedPerson>(SearchAsPages(parameters, pageSize));
         }
 
-        private async Task<ResultsPage<AbbreviatedPerson>> GetNearbyPageAsync(int pageSize, PagingTokens pagingTokens,
+        private async Task<ResultsPage<Person>> GetNearbyPageAsync(short pageSize, PagingTokens pagingTokens,
             GetNearbyPeopleParameters parameters, CancellationToken cancellationToken)
         {
             Ensure.IsValidPageSize(pageSize);
 
             var url = UrlProvider.GetV1PersonNearbyUrl(pageSize, pagingTokens, parameters);
-            return (await GetJsonAsync<ResultsPage<AbbreviatedPerson>>(url, cancellationToken)).Payload;
+            return (await GetJsonAsync<ResultsPage<Person>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<AbbreviatedPerson> GetNearbyPage(int pageSize, PagingTokens pagingTokens,
+        private ResultsPage<Person> GetNearbyPage(short pageSize, PagingTokens pagingTokens,
             GetNearbyPeopleParameters parameters, CancellationToken cancellationToken)
         {
             Ensure.IsValidPageSize(pageSize);
 
             var url = UrlProvider.GetV1PersonNearbyUrl(pageSize, pagingTokens, parameters);
-            return GetJson<ResultsPage<AbbreviatedPerson>>(url, cancellationToken).Payload;
+            return GetJson<ResultsPage<Person>>(url, cancellationToken).Payload;
         }
 
         /// <summary>
         ///     Searches for people near a location defined by latitude and longitude as pages of results
         /// </summary>
         /// <param name="parameters">The attributes used to search for people</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the pages of people either syncronously or asyncronously</returns>
-        public IAsyncCursor<ResultsPage<AbbreviatedPerson>> GetNearbyAsPages(GetNearbyPeopleParameters parameters,
-            int pageSize)
+        public IAsyncCursor<ResultsPage<Person>> GetNearbyAsPages(GetNearbyPeopleParameters parameters,
+            short? pageSize = null)
         {
             Ensure.IsNotNull(parameters, nameof(parameters));
-            Ensure.IsValidPageSize(pageSize);
+            Ensure.IsValidExplicitPageSize(pageSize);
 
-            return new AsyncPageCursor<AbbreviatedPerson>(
-                (size, tokens, token) => GetNearbyPage(pageSize, tokens, parameters, token),
-                async (size, tokens, token) => await GetNearbyPageAsync(pageSize, tokens, parameters, token),
-                pageSize);
+            var actualPageSize = GetPageSize(pageSize);
+
+            return new AsyncPageCursor<Person>(
+                (size, tokens, token) => GetNearbyPage(actualPageSize, tokens, parameters, token),
+                async (size, tokens, token) => await GetNearbyPageAsync(actualPageSize, tokens, parameters, token),
+                actualPageSize);
         }
 
         /// <summary>
         ///     Searches for people near a location defined by latitude and longitude
         /// </summary>
         /// <param name="parameters">The attributes used to search for people</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the people either syncronously or asyncronously</returns>
-        public IAsyncCursor<AbbreviatedPerson> GetNearby(GetNearbyPeopleParameters parameters, int pageSize)
+        public IAsyncCursor<Person> GetNearby(GetNearbyPeopleParameters parameters, short? pageSize = null)
         {
-            Ensure.IsNotNull(parameters, nameof(parameters));
-            Ensure.IsValidPageSize(pageSize);
-
-            return new AsyncPagedEntityCursor<AbbreviatedPerson>(GetNearbyAsPages(parameters, pageSize));
+            return new AsyncPagedEntityCursor<Person>(GetNearbyAsPages(parameters, pageSize));
         }
 
         /// <summary>

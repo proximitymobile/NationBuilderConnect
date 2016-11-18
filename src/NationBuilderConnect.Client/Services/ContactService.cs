@@ -1,12 +1,19 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using NationBuilderConnect.Client.Model;
+using NationBuilderConnect.Client.Model.Requests;
+using NationBuilderConnect.Client.Model.Responses;
 using NationBuilderConnect.Client.Services.Parameters;
 using NationBuilderConnect.Client.Utilities;
 using NationBuilderConnect.Client.Utilities.Cursors;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Services
 {
-    public class ContactService : NationBuilderService
+    /// <summary>
+    ///     Access to the NationBuilder Contacts API
+    /// </summary>
+    public class ContactService : NationBuilderApiService
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContactService" /> class
@@ -19,14 +26,14 @@ namespace NationBuilderConnect.Client.Services
         {
         }
 
-        private async Task<ResultsPage<Contact>> GetIndexPageAsync(int personId, int pageSize, PagingTokens pagingTokens,
+        private async Task<ResultsPage<Contact>> GetIndexPageAsync(int personId, short pageSize, PagingTokens pagingTokens,
             CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1ContactIndexUrl(personId, pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<Contact>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<Contact> GetIndexPage(int personId, int pageSize, PagingTokens pagingTokens,
+        private ResultsPage<Contact> GetIndexPage(int personId, short pageSize, PagingTokens pagingTokens,
             CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1ContactIndexUrl(personId, pageSize, pagingTokens);
@@ -37,27 +44,29 @@ namespace NationBuilderConnect.Client.Services
         ///     Retrieves a list of a person's contacts
         /// </summary>
         /// <param name="personId">The ID of the person whose contacts to return</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the contacts either syncronously or asyncronously</returns>
-        public IAsyncCursor<Contact> GetIndex(int personId, int pageSize)
+        public IAsyncCursor<Contact> GetIndex(int personId, short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
-            return new AsyncPagedEntityCursor<Contact>(GetIndexAsPages(personId, pageSize));
+            Ensure.IsValidExplicitPageSize(pageSize);
+            var actualPageSize = GetPageSize(pageSize);
+            return new AsyncPagedEntityCursor<Contact>(GetIndexAsPages(personId, actualPageSize));
         }
 
         /// <summary>
         ///     Retrieves a list of a person's contacts as pages of results
         /// </summary>
         /// <param name="personId">The ID of the person whose contacts to return</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server. If null it will use the default value.</param>
         /// <returns>A cursor that can be used to iterate through the contacts either syncronously or asyncronously</returns>
-        public IAsyncCursor<ResultsPage<Contact>> GetIndexAsPages(int personId, int pageSize)
+        public IAsyncCursor<ResultsPage<Contact>> GetIndexAsPages(int personId, short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
+            Ensure.IsValidExplicitPageSize(pageSize);
+            var actualPageSize = GetPageSize(pageSize);
             return new AsyncPageCursor<Contact>(
                 (size, tokens, token) => GetIndexPage(personId, size, tokens, token),
                 async (size, tokens, token) => await GetIndexPageAsync(personId, size, tokens, token),
-                pageSize);
+                actualPageSize);
         }
 
         /// <summary>

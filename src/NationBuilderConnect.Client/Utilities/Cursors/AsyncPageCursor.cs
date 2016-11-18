@@ -22,25 +22,51 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using NationBuilderConnect.Client.Model;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Utilities.Cursors
 {
+    /// <summary>
+    ///     Allows pages of results to be iterated both syncronously and asyncronously
+    /// </summary>
+    /// <typeparam name="TItem">The type of item in the pages</typeparam>
     public class AsyncPageCursor<TItem> : AsyncCursor<ResultsPage<TItem>>
     {
+        /// <summary>
+        ///     Delegate for retrieving a page of results asyncronously
+        /// </summary>
+        /// <param name="pageSize">The number of results to return per page</param>
+        /// <param name="pagingTokens">The paging values</param>
+        /// <param name="cancellationToken">Token which allows cancelling the operation</param>
+        /// <returns>A page of results</returns>
         public delegate Task<ResultsPage<TItem>> GetPageAsyncDelegate(
-            int pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken);
+            short pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken);
 
+        /// <summary>
+        ///     Delegate for retrieving a page of results syncronously
+        /// </summary>
+        /// <param name="pageSize">The number of results to return per page</param>
+        /// <param name="pagingTokens">The paging values</param>
+        /// <param name="cancellationToken">Token which allows cancelling the operation</param>
+        /// <returns>A page of results</returns>
         public delegate ResultsPage<TItem> GetPageDelegate(
-            int pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken);
+            short pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken);
 
         private readonly GetPageDelegate _getPage;
         private readonly GetPageAsyncDelegate _getPageAsync;
-        private readonly int _pageSize;
         private ResultsPage<TItem> _current;
         private PagingTokens _nextPageTokens;
         private int _pageNumber;
+        private short _pageSize;
 
-        public AsyncPageCursor(GetPageDelegate getPage, GetPageAsyncDelegate getPageAsync, int pageSize)
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AsyncPageCursor&lt;TItem&gt;" /> class
+        /// </summary>
+        /// <param name="getPage">Method to retrieve a page of results syncronously</param>
+        /// <param name="getPageAsync">Method to retrieve a page of results asyncronously</param>
+        /// <param name="pageSize">The number of results to return per page</param>
+        public AsyncPageCursor(GetPageDelegate getPage, GetPageAsyncDelegate getPageAsync, short pageSize)
         {
             if (getPage == null) throw new ArgumentNullException(nameof(getPage));
             if (getPageAsync == null) throw new ArgumentNullException(nameof(getPageAsync));
@@ -49,19 +75,33 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             _pageSize = pageSize;
         }
 
+        /// <inheritDoc />
         protected override ResultsPage<TItem> CurrentProtected => _current;
 
+        private bool IsLimitReachedBeforeMovingNext
+        {
+            get
+            {
+                var limit = Limit;
+                return limit != null && _pageNumber >= limit.Value;
+            }
+        }
+
+        /// <inheritDoc />
         protected override bool MoveNextProtected(CancellationToken cancellationToken = default(CancellationToken))
         {
             if (_pageNumber > 0 && _nextPageTokens == null) return false;
+            if (IsLimitReachedBeforeMovingNext) return false;
             var result = _getPage(_pageSize, _nextPageTokens, cancellationToken);
             return HandleResults(result);
         }
 
+        /// <inheritDoc />
         protected override async Task<bool> MoveNextProtectedAsync(
             CancellationToken cancellationToken = default(CancellationToken))
         {
             if (_pageNumber > 0 && _nextPageTokens == null) return false;
+            if (IsLimitReachedBeforeMovingNext) return false;
             var result = await _getPageAsync(_pageSize, _nextPageTokens, cancellationToken);
             return HandleResults(result);
         }
@@ -76,11 +116,20 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             var recordNumberEnd = recordNumberStart + result.Results.Count - 1;
             result.SetInformationKnownByClient(_pageNumber, recordNumberStart, recordNumberEnd);
 
-            _nextPageTokens = result.GetNextPagingValues();
+            _nextPageTokens = result.GetNextPagingTokens();
 
             _current = result;
 
             return true;
+        }
+
+        internal void ShrinkForTotalRecordLimitIfNeeded(int totalRecordLimit)
+        {
+            if (HasBeenUsed) throw new InvalidOperationException("Cursor has already been used");
+            if (totalRecordLimit >= _pageSize) return;
+
+            _pageSize = (short) totalRecordLimit;
+            Limit = 1;
         }
     }
 }

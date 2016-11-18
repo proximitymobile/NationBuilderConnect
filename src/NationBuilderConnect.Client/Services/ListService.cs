@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using NationBuilderConnect.Client.Model;
+using NationBuilderConnect.Client.Model.Requests;
+using NationBuilderConnect.Client.Model.Responses;
 using NationBuilderConnect.Client.Services.Parameters;
 using NationBuilderConnect.Client.Utilities;
 using NationBuilderConnect.Client.Utilities.Cursors;
+using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Services
 {
-    public class ListService : NationBuilderService
+    /// <summary>
+    ///     Access to the NationBuilder Lists API
+    /// </summary>
+    public class ListService : NationBuilderApiService
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="ListService" /> class
@@ -20,14 +27,14 @@ namespace NationBuilderConnect.Client.Services
         {
         }
 
-        private async Task<ResultsPage<CustomList>> GetIndexPageAsync(int pageSize,
+        private async Task<ResultsPage<CustomList>> GetIndexPageAsync(short pageSize,
             PagingTokens pagingTokens, CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1ListIndexUrl(pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<CustomList>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<CustomList> GetIndexPage(int pageSize, PagingTokens pagingTokens,
+        private ResultsPage<CustomList> GetIndexPage(short pageSize, PagingTokens pagingTokens,
             CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1ListIndexUrl(pageSize, pagingTokens);
@@ -37,12 +44,16 @@ namespace NationBuilderConnect.Client.Services
         /// <summary>
         ///     Retrieves a list of created custom lists
         /// </summary>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">
+        ///     The size of the pages of results to return from the server. If null it will use the default
+        ///     value.
+        /// </param>
         /// <returns>A cursor that can be used to iterate through the lists either syncronously or asyncronously</returns>
-        public IAsyncCursor<CustomList> GetIndex(int pageSize)
+        public IAsyncCursor<CustomList> GetIndex(short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
-            return new AsyncPagedEntityCursor<CustomList>(GetIndexAsPages(pageSize));
+            Ensure.IsValidExplicitPageSize(pageSize);
+            var actualPageSize = GetPageSize(pageSize);
+            return new AsyncPagedEntityCursor<CustomList>(GetIndexAsPages(actualPageSize));
         }
 
         /// <summary>
@@ -50,20 +61,21 @@ namespace NationBuilderConnect.Client.Services
         /// </summary>
         /// <param name="pageSize">The size of the pages of results to return from the server</param>
         /// <returns>A cursor that can be used to iterate through the lists either syncronously or asyncronously</returns>
-        public IAsyncCursor<ResultsPage<CustomList>> GetIndexAsPages(int pageSize)
+        public IAsyncCursor<ResultsPage<CustomList>> GetIndexAsPages(short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
-            return new AsyncPageCursor<CustomList>(GetIndexPage, GetIndexPageAsync, pageSize);
+            Ensure.IsValidExplicitPageSize(pageSize);
+            var actualPageSize = GetPageSize(pageSize);
+            return new AsyncPageCursor<CustomList>(GetIndexPage, GetIndexPageAsync, actualPageSize);
         }
 
         private async Task<ResultsPage<AbbreviatedPerson>> GetPeoplePageAsync(int listId,
-            int pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken)
+            short pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1ListPeopleIndexUrl(listId, pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<AbbreviatedPerson>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<AbbreviatedPerson> GetPeoplePage(int listId, int pageSize, PagingTokens pagingTokens,
+        private ResultsPage<AbbreviatedPerson> GetPeoplePage(int listId, short pageSize, PagingTokens pagingTokens,
             CancellationToken cancellationToken)
         {
             var url = UrlProvider.GetV1ListPeopleIndexUrl(listId, pageSize, pagingTokens);
@@ -74,11 +86,14 @@ namespace NationBuilderConnect.Client.Services
         ///     Retrieves people stored in a custom list
         /// </summary>
         /// <param name="listId">The ID of the custom list</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">
+        ///     The size of the pages of results to return from the server. If null it will use the default
+        ///     value.
+        /// </param>
         /// <returns>A cursor that can be used to iterate through the people either syncronously or asyncronously</returns>
-        public IAsyncCursor<AbbreviatedPerson> GetPeople(int listId, int pageSize)
+        public IAsyncCursor<AbbreviatedPerson> GetPeople(int listId, short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
+            Ensure.IsValidExplicitPageSize(pageSize);
             return new AsyncPagedEntityCursor<AbbreviatedPerson>(GetPeopleAsPages(listId, pageSize));
         }
 
@@ -86,15 +101,19 @@ namespace NationBuilderConnect.Client.Services
         ///     Retrieves people stored in a custom list as pages of results
         /// </summary>
         /// <param name="listId">The ID of the custom list</param>
-        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pageSize">
+        ///     The size of the pages of results to return from the server. If null it will use the default
+        ///     value.
+        /// </param>
         /// <returns>A cursor that can be used to iterate through the people either syncronously or asyncronously</returns>
-        public IAsyncCursor<ResultsPage<AbbreviatedPerson>> GetPeopleAsPages(int listId, int pageSize)
+        public IAsyncCursor<ResultsPage<AbbreviatedPerson>> GetPeopleAsPages(int listId, short? pageSize = null)
         {
-            Ensure.IsValidPageSize(pageSize);
+            Ensure.IsValidExplicitPageSize(pageSize);
+            var actualPageSize = GetPageSize(pageSize);
             return new AsyncPageCursor<AbbreviatedPerson>(
-                (size, tokens, token) => GetPeoplePage(listId, pageSize, tokens, token),
-                async (size, tokens, token) => await GetPeoplePageAsync(listId, pageSize, tokens, token),
-                pageSize);
+                (size, tokens, token) => GetPeoplePage(listId, actualPageSize, tokens, token),
+                async (size, tokens, token) => await GetPeoplePageAsync(listId, actualPageSize, tokens, token),
+                actualPageSize);
         }
 
         /// <summary>

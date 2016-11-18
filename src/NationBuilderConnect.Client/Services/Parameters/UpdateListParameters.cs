@@ -2,10 +2,13 @@
 
 namespace NationBuilderConnect.Client.Services.Parameters
 {
+    /// <summary>
+    /// The values to use to udpate a list
+    /// </summary>
     public class UpdateListParameters
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="UpdateListParameters" /> class.
+        ///     Initializes a new instance of the <see cref="UpdateListParameters" /> class
         /// </summary>
         /// <param name="name">The name of the list</param>
         /// <param name="slug">A unique identifier for the list</param>

@@ -1,0 +1,72 @@
+{
+    "title": "NationBuilderConnect.Model",
+    "authors": [ "Kevin Evans" ],
+    "description": "Shared model for NationBuilderConnect",
+    "version": "1.0.0",
+    "packOptions": {
+        "owners": [ "Proximity Mobile" ],
+        "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
+        "licenseUrl": "https://github.com/proximitymobile/NationBuilderConnect/blob/master/LICENSE",
+        "releaseNotes": "https://github.com/proximitymobile/NationBuilderConnect/releases",
+        "requireLicenseAcceptance": false,
+        "tags": [ "nationbuilder", "client", "connect", "model" ]
+    },
+    "buildOptions": {
+        "xmlDoc": true
+    },
+    "dependencies": {
+        "Newtonsoft.Json": "9.0.1"
+    },
+    "frameworks": {
+        "net40": {
+            "buildOptions": {
+                "define": [ "NET40" ]
+            },
+            "dependencies": {}
+        },
+        "net45": {
+            "buildOptions": {
+                "define": [ "NET45" ]
+            },
+            "frameworkAssemblies": {}
+        },
+        "net451": {
+            "buildOptions": {
+                "define": [ "NET451" ]
+            },
+            "frameworkAssemblies": {}
+        },
+        ".NETPortable,Version=4.5,Profile=Profile259": {
+            "buildOptions": {
+                "define": [ "PCL" ]
+            },
+            "frameworkAssemblies": {
+                "mscorlib": "",
+                "System.Core": "",
+                "System": "",
+                "System.Net.Primitives": ""
+            },
+            "dependencies": {}
+        },
+        "netstandard1.3": {
+            "buildOptions": {
+                "define": [ "NETSTANDARD" ]
+            },
+            "dependencies": {
+                "NETStandard.Library": "1.6.0",
+                "Microsoft.CSharp": "4.0.1"
+            }
+        },
+        "netcoreapp1.5": {
+            "buildOptions": {
+                "define": [ "NETCORE" ]
+            },
+            "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "type": "platform",
+                    "version": "1.0.0"
+                }
+            }
+        }
+    }
+}

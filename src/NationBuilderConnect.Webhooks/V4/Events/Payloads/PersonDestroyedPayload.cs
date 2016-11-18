@@ -1,4 +1,4 @@
-﻿using NationBuilderConnect.Webhooks.V4.Entities;
+﻿using NationBuilderConnect.Model;
 using Newtonsoft.Json;
 
 namespace NationBuilderConnect.Webhooks.V4.Events.Payloads

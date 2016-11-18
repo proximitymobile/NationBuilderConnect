@@ -2,10 +2,13 @@
 
 namespace NationBuilderConnect.Client.Services.Parameters
 {
+    /// <summary>
+    ///     The values to use for creating a contact with a person
+    /// </summary>
     public class CreateContactParameters
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="CreateContactParameters" /> class.
+        ///     Initializes a new instance of the <see cref="CreateContactParameters" /> class
         /// </summary>
         /// <param name="typeId">Id of the contact type. For possible values use the Contact Types API.</param>
         /// <param name="method">The method through which the contact was made. For possible values use the Contact Methods API.</param>

@@ -1,4 +1,4 @@
-﻿using NationBuilderConnect.Webhooks.V4.Entities;
+﻿using NationBuilderConnect.Webhooks.V4.Model;
 using Newtonsoft.Json;
 
 namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
@@ -12,6 +12,6 @@ namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
         ///     Details about the contact
         /// </summary>
         [JsonProperty("person_call")]
-        public Contact Contact { get; private set; }
+        public WebhookContact Contact { get; private set; }
     }
 }
