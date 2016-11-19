@@ -6,13 +6,13 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     A ballot that has been cast by a person
     /// </summary>
-    public class Ballot
+    public class Ballot : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     when the ballot was cast
         /// </summary>
         [JsonProperty("cast_at")]
-        public DateTime CastAt { get; private set; }
+        public DateTime? CastAt { get; private set; }
 
         /// <summary>
         ///     country code for the country the ballot was cast (required)

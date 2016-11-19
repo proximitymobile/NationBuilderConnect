@@ -18,7 +18,7 @@ namespace NationBuilderConnect.Client.Model.Responses
         ///     The person's precinct
         /// </summary>
         [JsonProperty("precinct")]
-        public PersonPrecinct Precinct { get; private set; }
+        public Precinct Precinct { get; private set; }
 
         /// <summary>
         ///     Whether or not the person was created. If false, an existing person was updated

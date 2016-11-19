@@ -5,7 +5,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     Details about a custom list of people
     /// </summary>
-    public class CustomList
+    public class CustomList : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     The Id of the list

@@ -5,7 +5,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     A person's precinct
     /// </summary>
-    public class PersonPrecinct
+    public class Precinct : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     The precinct ID

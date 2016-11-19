@@ -3,24 +3,24 @@
 namespace NationBuilderConnect.Model
 {
     /// <summary>
-    /// OAuth access token information
+    ///     OAuth access token information
     /// </summary>
-    public class OAuthAccessToken
+    public class OAuthAccessToken : ReadOnlyDataTransferObject
     {
         /// <summary>
-        /// The token value
+        ///     The token value
         /// </summary>
         [JsonProperty("access_token")]
         public string AccessToken { get; private set; }
 
         /// <summary>
-        /// The token type
+        ///     The token type
         /// </summary>
         [JsonProperty("token_type")]
         public string TokenType { get; private set; }
 
         /// <summary>
-        /// The token scope
+        ///     The token scope
         /// </summary>
         [JsonProperty("scope")]
         public string Scope { get; private set; }

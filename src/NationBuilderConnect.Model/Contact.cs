@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     Details about a contact with a person in your nation
     /// </summary>
-    public class Contact
+    public class Contact : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     id of the contact type. For possible values use the Contact Types API.

@@ -8,7 +8,7 @@ namespace NationBuilderConnect.Client.Model
     /// <summary>
     ///     Represents changes to a person, either for creating a person or updating one
     /// </summary>
-    public class PersonUpdate : CustomFieldsContainer, ITracksChanges
+    public class PersonUpdate : DataTransferObject, ITracksChanges
     {
         /// <summary>
         ///     date and time this person is available (such as for volunteer shifts)

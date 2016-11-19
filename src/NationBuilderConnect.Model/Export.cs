@@ -5,7 +5,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     A custom list export
     /// </summary>
-    public class Export
+    public class Export : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     The export ID

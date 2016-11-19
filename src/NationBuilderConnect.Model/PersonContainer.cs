@@ -5,7 +5,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     A class to assist with deserialization where a person is wrapped in another object
     /// </summary>
-    public class PersonContainer
+    public class PersonContainer : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     The person

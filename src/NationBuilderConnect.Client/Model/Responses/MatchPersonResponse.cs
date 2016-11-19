@@ -18,6 +18,6 @@ namespace NationBuilderConnect.Client.Model.Responses
         ///     The person's precinct
         /// </summary>
         [JsonProperty("precinct")]
-        public PersonPrecinct Precinct { get; private set; }
+        public Precinct Precinct { get; private set; }
     }
 }

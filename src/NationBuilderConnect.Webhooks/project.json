@@ -2,7 +2,7 @@
     "title": "NationBuilderConnect.Webhooks",
     "authors": [ "Kevin Evans" ],
     "description": ".NET library for use with NationBuilder webhooks",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "packOptions": {
         "owners": [ "Proximity Mobile" ],
         "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
@@ -15,7 +15,7 @@
         "xmlDoc": true
     },
     "dependencies": {
-        "NationBuilderConnect.Model": "1.0.0",
+        "NationBuilderConnect.Model": "1.0.1",
         "Newtonsoft.Json": "9.0.1"
     },
     "frameworks": {

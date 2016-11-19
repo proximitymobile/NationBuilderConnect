@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace NationBuilderConnect.Model
 {
     /// <summary>
-    ///     Base class for class that can contain person custom fields
+    ///     Base class for read only data transfer objects that may have extra fields that we haven't handled
     /// </summary>
-    public abstract class CustomFieldsContainer
+    public abstract class ReadOnlyDataTransferObject
     {
         [JsonExtensionData] private readonly IDictionary<string, JToken> _customFields =
             new Dictionary<string, JToken>();
@@ -27,15 +28,28 @@ namespace NationBuilderConnect.Model
         }
 
         /// <summary>
-        ///     Sets the value of a custom field
+        ///     Tries to get the custom field with the given name
         /// </summary>
-        /// <param name="name">The name of the custom field to set</param>
-        /// <param name="value">The value to set the custom field to</param>
-        public void SetCustomField(string name, string value)
+        /// <param name="name">The custom field name</param>
+        /// <param name="value">The value that is found</param>
+        /// <returns>True if the field was found, false if not</returns>
+        public bool TryGetCustomField(string name, out string value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be empty.", nameof(name));
 
-            _customFields[name] = value;
+            JToken token;
+            var valueFound = _customFields.TryGetValue(name, out token);
+            value = valueFound ? (string) token : null;
+            return valueFound;
+        }
+
+        /// <summary>
+        ///     Returns the names of the custom fields that have been loaded
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<string> GetCustomFieldNames()
+        {
+            return _customFields.Select(f => f.Key);
         }
     }
 }

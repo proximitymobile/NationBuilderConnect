@@ -5,7 +5,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     A person's address details
     /// </summary>
-    public class Address
+    public class Address : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     first address line
@@ -61,20 +61,88 @@ namespace NationBuilderConnect.Model
         [JsonProperty("lng")]
         public double? Longitude { get; private set; }
 
-/* Not sure about these
-                "fips": null,
-                "street_number": null,
-                "street_prefix": null,
-                "street_name": null,
-                "street_type": null,
-                "street_suffix": null,
-                "unit_number": null,
-                "zip4": null,
-                "zip5": null,
-                "sort_sequence": null,
-                "delivery_point": null,
-                "lot": null,
-                "carrier_route": null
-*/
+        /// <summary>
+        ///     The county
+        /// </summary>
+        [JsonProperty("county")]
+        public string County { get; private set; }
+
+        /// <summary>
+        ///     The FIPS county code
+        /// </summary>
+        [JsonProperty("fips")]
+        public string FipsCode { get; private set; }
+
+        /// <summary>
+        ///     The street number
+        /// </summary>
+        [JsonProperty("street_number")]
+        public string StreetNumber { get; private set; }
+
+        /// <summary>
+        ///     The street prefix
+        /// </summary>
+        [JsonProperty("street_prefix")]
+        public string StreetPrefix { get; private set; }
+
+        /// <summary>
+        ///     The street name
+        /// </summary>
+        [JsonProperty("street_name")]
+        public string StreetName { get; private set; }
+
+        /// <summary>
+        ///     The street type
+        /// </summary>
+        [JsonProperty("street_type")]
+        public string StreetType { get; private set; }
+
+        /// <summary>
+        ///     The street suffix
+        /// </summary>
+        [JsonProperty("street_suffix")]
+        public string StreetSuffix { get; private set; }
+
+        /// <summary>
+        ///     The unit number
+        /// </summary>
+        [JsonProperty("unit_number")]
+        public string UnitNumber { get; private set; }
+
+        /// <summary>
+        ///     The zip 4
+        /// </summary>
+        [JsonProperty("zip4")]
+        public string Zip4 { get; private set; }
+
+        /// <summary>
+        ///     The zip 5
+        /// </summary>
+        [JsonProperty("zip5")]
+        public string Zip5 { get; private set; }
+
+        /// <summary>
+        ///     The sequence to sort on
+        /// </summary>
+        [JsonProperty("sort_sequence")]
+        public string SortSequence { get; private set; }
+
+        /// <summary>
+        ///     The delivery point
+        /// </summary>
+        [JsonProperty("delivery_point")]
+        public string DeliveryPoint { get; private set; }
+
+        /// <summary>
+        ///     The lot
+        /// </summary>
+        [JsonProperty("lot")]
+        public string Lot { get; private set; }
+
+        /// <summary>
+        ///     The carrier route
+        /// </summary>
+        [JsonProperty("carrier_route")]
+        public string CarrierRoute { get; private set; }
     }
 }

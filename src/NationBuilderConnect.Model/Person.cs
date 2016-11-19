@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     The full details for a person
     /// </summary>
-    public class Person : CustomFieldsReadOnlyContainer
+    public class Person : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     the date at which to consider a customer no longer active

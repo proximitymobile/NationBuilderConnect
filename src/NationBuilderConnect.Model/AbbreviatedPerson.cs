@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     The abbreviated details for a person
     /// </summary>
-    public class AbbreviatedPerson : CustomFieldsReadOnlyContainer
+    public class AbbreviatedPerson : ReadOnlyDataTransferObject
     {
         /// <summary>
         ///     this person's birth date
@@ -45,6 +45,12 @@ namespace NationBuilderConnect.Model
         public DateTime? CreatedAt { get; private set; }
 
         /// <summary>
+        ///     The ID from DataTrust
+        /// </summary>
+        [JsonProperty("datatrust_id")]
+        public string DataTrustId { get; private set; }
+
+        /// <summary>
         ///     this is a boolean flag that lets us know if this person is on a do not call list
         /// </summary>
         [JsonProperty("do_not_call")]
@@ -55,7 +61,6 @@ namespace NationBuilderConnect.Model
         /// </summary>
         [JsonProperty("do_not_contact")]
         public bool DoNotContact { get; private set; }
-
 
         /// <summary>
         ///     this person’s ID from Catalist
@@ -226,6 +231,12 @@ namespace NationBuilderConnect.Model
         public Address PrimaryAddress { get; private set; }
 
         /// <summary>
+        ///     The URL for the person's profile image
+        /// </summary>
+        [JsonProperty("profile_image_url_ssl")]
+        public string ProfileImageUrl { get; private set; }
+
+        /// <summary>
         ///     the ID of the person who recruited this person
         /// </summary>
         [JsonProperty("recruiter_id")]
@@ -266,6 +277,12 @@ namespace NationBuilderConnect.Model
         /// </summary>
         [JsonProperty("sex")]
         public char? Sex { get; private set; }
+
+        /// <summary>
+        ///     '0' for person, '1' for organization
+        /// </summary>
+        [JsonProperty("signup_type")]
+        public byte SignUpType { get; private set; }
 
         /// <summary>
         ///     this person’s ID from a state voter file
@@ -333,5 +350,17 @@ namespace NationBuilderConnect.Model
         /// </summary>
         [JsonProperty("village_district")]
         public string VillageDistrict { get; private set; }
+
+        /// <summary>
+        ///     The ward to which this person belongs
+        /// </summary>
+        [JsonProperty("ward")]
+        public string Ward { get; private set; }
+
+        /// <summary>
+        ///     a work phone number for this person
+        /// </summary>
+        [JsonProperty("work_phone_number")]
+        public string WorkPhoneNumber { get; private set; }
     }
 }
