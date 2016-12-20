@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     The abbreviated details for a person
     /// </summary>
-    public class AbbreviatedPerson : ReadOnlyDataTransferObject
+    public class AbbreviatedPerson : JsonReadOnlyDto
     {
         /// <summary>
         ///     this person's birth date

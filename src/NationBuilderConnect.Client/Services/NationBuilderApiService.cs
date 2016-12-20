@@ -123,13 +123,15 @@ namespace NationBuilderConnect.Client.Services
         /// <param name="content">The content for the body of the request</param>
         /// <param name="cancellationToken">Token allowing request to be cancelled</param>
         /// <param name="isContentAlreadyJson">Whether or not the content has already been serialized to JSON</param>
+        /// <param name="includeCredentials">Whether to include credentials in the request. Defaults to true.</param>
         /// <returns>Details about the response from the API</returns>
         protected virtual Task<ApiResponse<TResponse>> PostJsonAsync<TResponse>(string relativeUrl, object content,
-            CancellationToken cancellationToken = default(CancellationToken), bool isContentAlreadyJson = false)
+            CancellationToken cancellationToken = default(CancellationToken), bool isContentAlreadyJson = false, 
+            bool includeCredentials = true)
             where TResponse : class
         {
             return SendJsonAsync<TResponse>(relativeUrl, HttpMethod.Post, content, cancellationToken,
-                isContentAlreadyJson, true);
+                isContentAlreadyJson, true, includeCredentials:includeCredentials);
         }
 
         /// <summary>
@@ -393,12 +395,13 @@ namespace NationBuilderConnect.Client.Services
         /// <param name="isContentAlreadyJson">Whether or not the content has already been serialized to JSON</param>
         /// <param name="throwOnFailureCodes">Whether to throw an exception if a failure response is returned from the server</param>
         /// <param name="isNoResponse">Whether we can ignore the response body</param>
+        /// /// <param name="includeCredentials">Whether to include credentials in the request. Defaults to true.</param>
         /// <returns>Details about the response from the API</returns>
         private async Task<ApiResponse<TResponse>> SendJsonAsync<TResponse>(string relativeUrl, HttpMethod method,
             object content, CancellationToken cancellationToken, bool isContentAlreadyJson, bool throwOnFailureCodes,
-            bool isNoResponse = false) where TResponse : class
+            bool isNoResponse = false, bool includeCredentials = true) where TResponse : class
         {
-            var endpoint = AddCredentialsToUrl(relativeUrl);
+            var endpoint = includeCredentials ? AddCredentialsToUrl(relativeUrl) : relativeUrl;
             endpoint = GetFullEndpointUrl(Options, endpoint);
 
             var useFakeDelete = method == HttpMethod.Delete && content != null;

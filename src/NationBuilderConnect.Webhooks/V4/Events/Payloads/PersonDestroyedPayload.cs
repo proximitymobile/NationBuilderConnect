@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
     /// <summary>
     ///     Payload that is sent to our server from NationBuilder when a person is destroyed
     /// </summary>
-    public class PersonDestroyedPayload : ReadOnlyDataTransferObject, INationBuilderEventPayload
+    public class PersonDestroyedPayload : JsonReadOnlyDto, INationBuilderEventPayload
     {
         /// <summary>
         ///     The person that was created or updated

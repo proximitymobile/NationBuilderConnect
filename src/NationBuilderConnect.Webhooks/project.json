@@ -47,8 +47,7 @@
             "frameworkAssemblies": {
                 "mscorlib": "",
                 "System.Core": "",
-                "System": "",
-                "System.Net.Primitives": ""
+                "System": ""
             },
             "dependencies": {
             }

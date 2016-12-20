@@ -7,7 +7,7 @@ namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
     /// <summary>
     ///     Payload that is sent to our server from NationBuilder when a person is contacted
     /// </summary>
-    public class PersonContactedPayload : ReadOnlyDataTransferObject, INationBuilderEventPayload
+    public class PersonContactedPayload : JsonReadOnlyDto, INationBuilderEventPayload
     {
         /// <summary>
         ///     Details about the contact

@@ -132,6 +132,12 @@ namespace NationBuilderConnect.Client.Utilities
         string GetV1PersonDestroyUrl(int personId);
 
         /// <summary>
+        ///     Gets the relative URL for the people me method
+        /// </summary>
+        /// <returns>The relative URL for the people me method</returns>
+        string GetV1PersonMeUrl();
+
+        /// <summary>
         ///     Gets the relative URL for the contact create method
         /// </summary>
         /// <param name="personId">The ID of the person to create the contact for</param>
@@ -205,7 +211,6 @@ namespace NationBuilderConnect.Client.Utilities
         /// <param name="tagName">The name of the tag to add to the people</param>
         /// <returns>The relative URL for the custom list add people tag method</returns>
         string GetV1ListAddTagUrl(int listId, string tagName);
-
 
         /// <summary>
         ///     Gets the relative URL for the custom list remove people tag method

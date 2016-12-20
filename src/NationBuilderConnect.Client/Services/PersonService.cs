@@ -156,6 +156,30 @@ namespace NationBuilderConnect.Client.Services
         }
 
         /// <summary>
+        ///     Gets the person whose credentials are currently being used to access to API syncronously
+        /// </summary>
+        /// <param name="cancellationToken">Token allowing the request to be cancelled</param>
+        /// <returns>The full person representation and their precinct</returns>
+        public MePersonResponse GetMe(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var url = UrlProvider.GetV1PersonMeUrl();
+            var result = GetJson<MePersonResponse>(url, cancellationToken);
+            return result.Payload;
+        }
+
+        /// <summary>
+        ///     Gets the person whose credentials are currently being used to access to API asyncronously
+        /// </summary>
+        /// <param name="cancellationToken">Token allowing the request to be cancelled</param>
+        /// <returns>The full person representation and their precinct</returns>
+        public async Task<MePersonResponse> GetMeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var url = UrlProvider.GetV1PersonMeUrl();
+            var result = await GetJsonAsync<MePersonResponse>(url, cancellationToken);
+            return result.Payload;
+        }
+
+        /// <summary>
         ///     Finds a person with certain attributes syncronously. If more than one matching person is found, an
         ///     <see cref="ApiCallFailedException" /> will be thrown. If no match is found either an
         ///     <see cref="ApiCallFailedException" /> will be thrown or null will be returned depending on the throwOnNotFound

@@ -23,7 +23,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NationBuilderConnect.Client.Model;
-using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Utilities.Cursors
 {
@@ -93,7 +92,7 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             if (_pageNumber > 0 && _nextPageTokens == null) return false;
             if (IsLimitReachedBeforeMovingNext) return false;
             var result = _getPage(_pageSize, _nextPageTokens, cancellationToken);
-            return HandleResults(result);
+            return HandleResults(result, cancellationToken);
         }
 
         /// <inheritDoc />
@@ -103,12 +102,14 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             if (_pageNumber > 0 && _nextPageTokens == null) return false;
             if (IsLimitReachedBeforeMovingNext) return false;
             var result = await _getPageAsync(_pageSize, _nextPageTokens, cancellationToken);
-            return HandleResults(result);
+            return HandleResults(result, cancellationToken);
         }
 
-        private bool HandleResults(ResultsPage<TItem> result)
+        private bool HandleResults(ResultsPage<TItem> result, CancellationToken cancellationToken)
         {
             if (result.Results == null || !result.Results.Any()) return false;
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             _pageNumber++;
 

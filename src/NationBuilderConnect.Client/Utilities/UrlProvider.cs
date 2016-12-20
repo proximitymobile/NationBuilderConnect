@@ -103,6 +103,12 @@ namespace NationBuilderConnect.Client.Utilities
         }
 
         /// <inheritDoc/>
+        public string GetV1PersonMeUrl()
+        {
+            return "api/v1/people/me";
+        }
+
+        /// <inheritDoc/>
         public string GetV1ContactCreateUrl(int personId)
         {
             return $"api/v1/people/{personId}/contacts";

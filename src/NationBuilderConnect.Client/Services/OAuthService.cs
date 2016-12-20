@@ -38,7 +38,7 @@ namespace NationBuilderConnect.Client.Services
                 clientId, clientSecret, redirectUri, authorizationCode,
                 "authorization_code");
 
-            return (await PostJsonAsync<OAuthAccessToken>(url, content)).Payload;
+            return (await PostJsonAsync<OAuthAccessToken>(url, content, includeCredentials:false)).Payload;
         }
     }
 }

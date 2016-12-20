@@ -8,7 +8,7 @@ namespace NationBuilderConnect.Webhooks.V4.Events
     ///     The base class for all webhook events
     /// </summary>
     /// <typeparam name="TPayload">The event payload</typeparam>
-    public abstract class NationBuilderWebhookEvent<TPayload> : ReadOnlyDataTransferObject where TPayload : class, INationBuilderEventPayload
+    public abstract class NationBuilderWebhookEvent<TPayload> : JsonReadOnlyDto where TPayload : class, INationBuilderEventPayload
     {
         /// <summary>
         ///     The slug of the nation in which the event took place

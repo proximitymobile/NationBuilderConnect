@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
     /// <summary>
     ///     Payload that is sent to our server from NationBuilder when a person is changed
     /// </summary>
-    public class PersonChangedPayload : ReadOnlyDataTransferObject, INationBuilderEventPayload
+    public class PersonChangedPayload : JsonReadOnlyDto, INationBuilderEventPayload
     {
         /// <summary>
         ///     The person that was changed

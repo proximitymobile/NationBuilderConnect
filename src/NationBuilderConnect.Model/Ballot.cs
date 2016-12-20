@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     A ballot that has been cast by a person
     /// </summary>
-    public class Ballot : ReadOnlyDataTransferObject
+    public class Ballot : JsonReadOnlyDto
     {
         /// <summary>
         ///     when the ballot was cast

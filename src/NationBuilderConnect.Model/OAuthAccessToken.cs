@@ -5,7 +5,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     OAuth access token information
     /// </summary>
-    public class OAuthAccessToken : ReadOnlyDataTransferObject
+    public class OAuthAccessToken : JsonReadOnlyDto
     {
         /// <summary>
         ///     The token value

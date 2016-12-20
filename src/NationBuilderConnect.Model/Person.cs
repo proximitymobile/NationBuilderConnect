@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     The full details for a person
     /// </summary>
-    public class Person : ReadOnlyDataTransferObject
+    public class Person : JsonReadOnlyDto
     {
         /// <summary>
         ///     the date at which to consider a customer no longer active
@@ -772,13 +772,13 @@ namespace NationBuilderConnect.Model
         ///     this person's cell phone number
         /// </summary>
         [JsonProperty("mobile")]
-        public string Mobile { get; private set; }
+        public string MobilePhoneNumber { get; private set; }
 
         /// <summary>
         ///     this person's cell phone number in normalized form
         /// </summary>
         [JsonProperty("mobile_normalized")]
-        public string MobileNormalized { get; private set; }
+        public string MobilePhoneNumberNormalized { get; private set; }
 
         /// <summary>
         ///     a boolean representing whether the person has opted-in to mobile correspondence
@@ -887,13 +887,13 @@ namespace NationBuilderConnect.Model
         ///     this person's home phone number
         /// </summary>
         [JsonProperty("phone")]
-        public string Phone { get; private set; }
+        public string HomePhoneNumber { get; private set; }
 
         /// <summary>
         ///     this person's home phone number in normalized form
         /// </summary>
         [JsonProperty("phone_normalized")]
-        public string PhoneNormalized { get; private set; }
+        public string HomePhoneNumberNormalized { get; private set; }
 
         /// <summary>
         ///     the time that has been selected as the best time to call this person
@@ -923,7 +923,7 @@ namespace NationBuilderConnect.Model
         ///     the name prefix of this person, i.e. Mr., Mrs.
         /// </summary>
         [JsonProperty("prefix")]
-        public string Prefix { get; private set; }
+        public string NamePrefix { get; private set; }
 
         /// <summary>
         ///     the party this person had selected before their current party selection
@@ -1117,7 +1117,7 @@ namespace NationBuilderConnect.Model
         ///     the suffix this person uses w/their name, i.e. Jr., Sr. or III
         /// </summary>
         [JsonProperty("suffix")]
-        public string Suffix { get; private set; }
+        public string NameSuffix { get; private set; }
 
         /// <summary>
         ///     the level of support this person has for your nation, expressed as a number between 1 and 5, 1 being Strong
@@ -1165,8 +1165,9 @@ namespace NationBuilderConnect.Model
         /// <summary>
         ///     this person’s location based on their Twitter profile
         /// </summary>
-        [JsonProperty("twitter_address")]
-        public Address TwitterAddress { get; private set; }
+        /// Removed because I can't figure out what type this is
+        //[JsonProperty("twitter_address")]
+        //public Address TwitterAddress { get; private set; }
 
         /// <summary>
         ///     the description that this person provided in their Twitter profile
@@ -1226,7 +1227,7 @@ namespace NationBuilderConnect.Model
         ///     the date/time that this person unsubscribed from emails
         /// </summary>
         [JsonProperty("unsubscribed_at")]
-        public DateTime? UnsubscribedAt { get; private set; }
+        public DateTime? UnsubscribedFromEmailsAt { get; private set; }
 
         /// <summary>
         ///     the timestamp representing when this person was last updated

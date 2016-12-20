@@ -23,7 +23,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NationBuilderConnect.Client.Model;
-using NationBuilderConnect.Model;
 
 namespace NationBuilderConnect.Client.Utilities.Cursors
 {
@@ -52,11 +51,13 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
         /// <inheritDoc />
         protected override TItem CurrentProtected => _currentItem;
 
-        private bool MoveToNextEntityOnCurrentPage()
+        private bool MoveToNextEntityOnCurrentPage(CancellationToken cancellationToken)
         {
             if (!_pageCursor.HasBeenUsed || _pageCursor.Current == null ||
                 _currentEntityIndexOnPage >= _pageCursor.Current.Results.Count - 1)
                 return false;
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             _currentEntityIndex++;
             _currentEntityIndexOnPage++;
@@ -77,7 +78,7 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
         protected override bool MoveNextProtected(CancellationToken cancellationToken = default(CancellationToken))
         {
             if (IsLimitReachedBeforeMovingNext) return false;
-            if (MoveToNextEntityOnCurrentPage()) return true;
+            if (MoveToNextEntityOnCurrentPage(cancellationToken)) return true;
             var hasPage = _pageCursor.MoveNext(cancellationToken);
             return hasPage && HandleNewPage(_pageCursor.Current);
         }
@@ -87,7 +88,7 @@ namespace NationBuilderConnect.Client.Utilities.Cursors
             CancellationToken cancellationToken = default(CancellationToken))
         {
             if (IsLimitReachedBeforeMovingNext) return false;
-            if (MoveToNextEntityOnCurrentPage()) return true;
+            if (MoveToNextEntityOnCurrentPage(cancellationToken)) return true;
             var hasPage = await _pageCursor.MoveNextAsync(cancellationToken);
             return hasPage && HandleNewPage(_pageCursor.Current);
         }

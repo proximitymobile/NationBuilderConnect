@@ -8,7 +8,7 @@ namespace NationBuilderConnect.Client.Model
     /// <summary>
     ///     Represents changes to a person, either for creating a person or updating one
     /// </summary>
-    public class PersonUpdate : DataTransferObject, ITracksChanges
+    public class PersonUpdate : JsonDto, ITracksChanges
     {
         /// <summary>
         ///     date and time this person is available (such as for volunteer shifts)
@@ -410,7 +410,7 @@ namespace NationBuilderConnect.Client.Model
         ///     this person's cell phone number
         /// </summary>
         [JsonProperty("mobile")]
-        public string Mobile { get; set; }
+        public string MobilePhoneNumber { get; set; }
 
         /// <summary>
         ///     this person’s ID from the NationBuilder Election Center
@@ -464,7 +464,7 @@ namespace NationBuilderConnect.Client.Model
         ///     this person's home phone number
         /// </summary>
         [JsonProperty("phone")]
-        public string Phone { get; set; }
+        public string HomePhoneNumber { get; set; }
 
         /// <summary>
         ///     the time that has been selected as the best time to call this person
@@ -494,7 +494,7 @@ namespace NationBuilderConnect.Client.Model
         ///     the name prefix of this person, i.e. Mr., Mrs.
         /// </summary>
         [JsonProperty("prefix")]
-        public string Prefix { get; set; }
+        public string NamePrefix { get; set; }
 
         /// <summary>
         ///     the party this person had selected before their current party selection
@@ -600,7 +600,7 @@ namespace NationBuilderConnect.Client.Model
         ///     the suffix this person uses w/their name, i.e. Jr., Sr. or III
         /// </summary>
         [JsonProperty("suffix")]
-        public string Suffix { get; set; }
+        public string NameSuffix { get; set; }
 
         /// <summary>
         ///     the level of support this person has for your nation, expressed as a number between 1 and 5, 1 being Strong

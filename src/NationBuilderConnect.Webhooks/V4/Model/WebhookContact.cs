@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Webhooks.V4.Model
     /// <summary>
     ///     Details about a contact with a person in your nation
     /// </summary>
-    public class WebhookContact : ReadOnlyDataTransferObject
+    public class WebhookContact : JsonReadOnlyDto
     {
         /// <summary>
         ///     The ID of the method through which the contact was made. For possible values use the Contact Methods API.

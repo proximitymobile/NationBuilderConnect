@@ -5,7 +5,7 @@ namespace NationBuilderConnect.Model
     /// <summary>
     ///     A person's address details
     /// </summary>
-    public class Address : ReadOnlyDataTransferObject
+    public class Address : JsonReadOnlyDto
     {
         /// <summary>
         ///     first address line

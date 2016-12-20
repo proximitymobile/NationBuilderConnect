@@ -2,7 +2,7 @@
     "title": "NationBuilderConnect.Client",
     "authors": [ "Kevin Evans" ],
     "description": "A simple .NET NationBuilder client",
-    "version": "1.0.1",
+    "version": "1.0.5",
     "packOptions": {
         "owners": [ "Proximity Mobile" ],
         "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
@@ -15,7 +15,7 @@
         "xmlDoc": true
     },
     "dependencies": {
-        "NationBuilderConnect.Model": "1.0.1",
+        "NationBuilderConnect.Model": "1.0.3",
         "Newtonsoft.Json": "9.0.1"
     },
     "frameworks": {
@@ -33,16 +33,36 @@
                 "define": [ "NET45" ]
             },
             "frameworkAssemblies": {
-                "System.Net.Http": "4.0.0.0"
-            }
+                "System.Net.Http": ""
+            },
+            "dependencies": {}
         },
         "net451": {
             "buildOptions": {
                 "define": [ "NET451" ]
             },
             "frameworkAssemblies": {
-                "System.Net.Http": "4.0.0.0"
-            }
+                "System.Net.Http": ""
+            },
+            "dependencies": {}
+        },
+        "net46": {
+            "buildOptions": {
+                "define": [ "NET46" ]
+            },
+            "frameworkAssemblies": {
+                "System.Net.Http": ""
+            },
+            "dependencies": {}
+        },
+        "net461": {
+            "buildOptions": {
+                "define": [ "NET461" ]
+            },
+            "frameworkAssemblies": {
+                "System.Net.Http": ""
+            },
+            "dependencies": {}
         },
         ".NETPortable,Version=4.5,Profile=Profile259": {
             "buildOptions": {
@@ -52,7 +72,7 @@
                 "mscorlib": "",
                 "System.Core": "",
                 "System": "",
-                "System.Net.Primitives": ""
+                "System.Net.Primitives": "" 
             },
             "dependencies": {
                 "Microsoft.Net.Http": "2.2.29"

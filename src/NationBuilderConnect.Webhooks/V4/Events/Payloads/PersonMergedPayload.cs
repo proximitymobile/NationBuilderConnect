@@ -6,7 +6,7 @@ namespace NationBuilderConnect.Webhooks.V4.Events.Payloads
     /// <summary>
     ///     Payload that is sent to our server from NationBuilder when 2 person records are merged
     /// </summary>
-    public class PersonMergedPayload : ReadOnlyDataTransferObject, INationBuilderEventPayload
+    public class PersonMergedPayload : JsonReadOnlyDto, INationBuilderEventPayload
     {
         /// <summary>
         ///     Container for the person that the two records were merged into

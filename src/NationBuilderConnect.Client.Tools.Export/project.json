@@ -44,20 +44,6 @@
                 "System.Net.Http": "4.0.0.0"
             }
         },
-        ".NETPortable,Version=4.5,Profile=Profile259": {
-            "buildOptions": {
-                "define": [ "PCL" ]
-            },
-            "frameworkAssemblies": {
-                "mscorlib": "",
-                "System.Core": "",
-                "System": "",
-                "System.Net.Primitives": ""
-            },
-            "dependencies": {
-                "Microsoft.Net.Http": "2.2.29"
-            }
-        },
         "netstandard1.3": {
             "buildOptions": {
                 "define": [ "NETSTANDARD" ]
