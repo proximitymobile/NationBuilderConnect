@@ -2,7 +2,7 @@
     "title": "NationBuilderConnect.Client",
     "authors": [ "Kevin Evans" ],
     "description": "A simple .NET NationBuilder client",
-    "version": "1.0.5",
+    "version": "1.0.8",
     "packOptions": {
         "owners": [ "Proximity Mobile" ],
         "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",

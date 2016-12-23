@@ -27,15 +27,29 @@ namespace NationBuilderConnect.Client.Services
         {
         }
 
-        private async Task<ResultsPage<CustomList>> GetIndexPageAsync(short pageSize,
-            PagingTokens pagingTokens, CancellationToken cancellationToken)
+        /// <summary>
+        ///     Retrieves a page of custom lists asyncronously
+        /// </summary>
+        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pagingTokens">The paging tokens to use</param>
+        /// <param name="cancellationToken">Token allowing the request to be cancelled</param>
+        /// <returns>A page of custom lists</returns>
+        public async Task<ResultsPage<CustomList>> GetIndexPageAsync(short pageSize,
+            PagingTokens pagingTokens, CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1ListIndexUrl(pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<CustomList>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<CustomList> GetIndexPage(short pageSize, PagingTokens pagingTokens,
-            CancellationToken cancellationToken)
+        /// <summary>
+        ///     Retrieves a page of custom lists syncronously
+        /// </summary>
+        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pagingTokens">The paging tokens to use</param>
+        /// <param name="cancellationToken">Token allowing the request to be cancelled</param>
+        /// <returns>A page of custom lists</returns>
+        public ResultsPage<CustomList> GetIndexPage(short pageSize, PagingTokens pagingTokens,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1ListIndexUrl(pageSize, pagingTokens);
             return GetJson<ResultsPage<CustomList>>(url, cancellationToken).Payload;
@@ -68,15 +82,31 @@ namespace NationBuilderConnect.Client.Services
             return new AsyncPageCursor<CustomList>(GetIndexPage, GetIndexPageAsync, actualPageSize);
         }
 
-        private async Task<ResultsPage<AbbreviatedPerson>> GetPeoplePageAsync(int listId,
-            short pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken)
+        /// <summary>
+        /// Gets a page of people in the list asyncronously
+        /// </summary>
+        /// <param name="listId">The list id</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pagingTokens">The paging tokens to use</param>
+        /// <param name="cancellationToken">Token allowing the request to be cancelled</param>
+        /// <returns>A page of people in the list asyncronously</returns>
+        public async Task<ResultsPage<AbbreviatedPerson>> GetPeoplePageAsync(int listId,
+            short pageSize, PagingTokens pagingTokens, CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1ListPeopleIndexUrl(listId, pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<AbbreviatedPerson>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<AbbreviatedPerson> GetPeoplePage(int listId, short pageSize, PagingTokens pagingTokens,
-            CancellationToken cancellationToken)
+        /// <summary>
+        /// Gets a page of people in the list syncronously
+        /// </summary>
+        /// <param name="listId">The list id</param>
+        /// <param name="pageSize">The size of the pages of results to return from the server</param>
+        /// <param name="pagingTokens">The paging tokens to use</param>
+        /// <param name="cancellationToken">Token allowing the request to be cancelled</param>
+        /// <returns>A page of people in the list asyncronously</returns>
+        public ResultsPage<AbbreviatedPerson> GetPeoplePage(int listId, short pageSize, PagingTokens pagingTokens,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1ListPeopleIndexUrl(listId, pageSize, pagingTokens);
             return GetJson<ResultsPage<AbbreviatedPerson>>(url, cancellationToken).Payload;

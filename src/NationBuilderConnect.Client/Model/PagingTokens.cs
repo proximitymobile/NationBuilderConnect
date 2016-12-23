@@ -7,6 +7,16 @@ namespace NationBuilderConnect.Client.Model
     /// </summary>
     public class PagingTokens
     {
+        public PagingTokens()
+        {
+        }
+
+        public PagingTokens(string nonce, string token)
+        {
+            Nonce = nonce;
+            Token = token;
+        }
+
         /// <summary>
         ///     The paging nonce
         /// </summary>
@@ -26,11 +36,7 @@ namespace NationBuilderConnect.Client.Model
         {
             if (string.IsNullOrWhiteSpace(url)) return null;
             var queryStringValues = HttpUtility.ParseQueryString(HttpUtility.GetQueryString(url));
-            return new PagingTokens
-            {
-                Nonce = queryStringValues["__nonce"],
-                Token = queryStringValues["__token"]
-            };
+            return new PagingTokens(queryStringValues["__nonce"], queryStringValues["__token"]);
         }
     }
 }

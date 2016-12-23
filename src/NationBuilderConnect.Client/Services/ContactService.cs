@@ -26,15 +26,15 @@ namespace NationBuilderConnect.Client.Services
         {
         }
 
-        private async Task<ResultsPage<Contact>> GetIndexPageAsync(int personId, short pageSize, PagingTokens pagingTokens,
-            CancellationToken cancellationToken)
+        public async Task<ResultsPage<Contact>> GetIndexPageAsync(int personId, short pageSize, PagingTokens pagingTokens,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1ContactIndexUrl(personId, pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<Contact>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<Contact> GetIndexPage(int personId, short pageSize, PagingTokens pagingTokens,
-            CancellationToken cancellationToken)
+        public ResultsPage<Contact> GetIndexPage(int personId, short pageSize, PagingTokens pagingTokens,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1ContactIndexUrl(personId, pageSize, pagingTokens);
             return GetJson<ResultsPage<Contact>>(url, cancellationToken).Payload;

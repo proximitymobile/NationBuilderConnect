@@ -28,15 +28,15 @@ namespace NationBuilderConnect.Client.Services
         {
         }
 
-        private async Task<ResultsPage<AbbreviatedPerson>> GetIndexPageAsync(short pageSize, PagingTokens pagingTokens,
-            CancellationToken cancellationToken)
+        public async Task<ResultsPage<AbbreviatedPerson>> GetIndexPageAsync(short pageSize, PagingTokens pagingTokens,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1PersonIndexUrl(pageSize, pagingTokens);
             return (await GetJsonAsync<ResultsPage<AbbreviatedPerson>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<AbbreviatedPerson> GetIndexPage(short pageSize, PagingTokens pagingTokens,
-            CancellationToken cancellationToken)
+        public ResultsPage<AbbreviatedPerson> GetIndexPage(short pageSize, PagingTokens pagingTokens,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1PersonIndexUrl(pageSize, pagingTokens);
             return GetJson<ResultsPage<AbbreviatedPerson>>(url, cancellationToken).Payload;
@@ -201,15 +201,15 @@ namespace NationBuilderConnect.Client.Services
             return result.Payload;
         }
 
-        private async Task<ResultsPage<AbbreviatedPerson>> GetSearchPageAsync(short pageSize, PagingTokens pagingTokens,
-            SearchPeopleParameters parameters, CancellationToken cancellationToken)
+        public async Task<ResultsPage<AbbreviatedPerson>> GetSearchPageAsync(short pageSize, PagingTokens pagingTokens,
+            SearchPeopleParameters parameters, CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1PersonSearchUrl(pageSize, pagingTokens, parameters);
             return (await GetJsonAsync<ResultsPage<AbbreviatedPerson>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<AbbreviatedPerson> GetSearchPage(short pageSize, PagingTokens pagingTokens,
-            SearchPeopleParameters parameters, CancellationToken cancellationToken)
+        public ResultsPage<AbbreviatedPerson> GetSearchPage(short pageSize, PagingTokens pagingTokens,
+            SearchPeopleParameters parameters, CancellationToken cancellationToken = default(CancellationToken))
         {
             var url = UrlProvider.GetV1PersonSearchUrl(pageSize, pagingTokens, parameters);
             return GetJson<ResultsPage<AbbreviatedPerson>>(url, cancellationToken).Payload;
@@ -246,8 +246,8 @@ namespace NationBuilderConnect.Client.Services
             return new AsyncPagedEntityCursor<AbbreviatedPerson>(SearchAsPages(parameters, pageSize));
         }
 
-        private async Task<ResultsPage<Person>> GetNearbyPageAsync(short pageSize, PagingTokens pagingTokens,
-            GetNearbyPeopleParameters parameters, CancellationToken cancellationToken)
+        public async Task<ResultsPage<Person>> GetNearbyPageAsync(short pageSize, PagingTokens pagingTokens,
+            GetNearbyPeopleParameters parameters, CancellationToken cancellationToken = default(CancellationToken))
         {
             Ensure.IsValidPageSize(pageSize);
 
@@ -255,8 +255,8 @@ namespace NationBuilderConnect.Client.Services
             return (await GetJsonAsync<ResultsPage<Person>>(url, cancellationToken)).Payload;
         }
 
-        private ResultsPage<Person> GetNearbyPage(short pageSize, PagingTokens pagingTokens,
-            GetNearbyPeopleParameters parameters, CancellationToken cancellationToken)
+        public ResultsPage<Person> GetNearbyPage(short pageSize, PagingTokens pagingTokens,
+            GetNearbyPeopleParameters parameters, CancellationToken cancellationToken = default(CancellationToken))
         {
             Ensure.IsValidPageSize(pageSize);
 

@@ -2,7 +2,7 @@
     "title": "NationBuilderConnect.Client.Tools.Export",
     "authors": [ "Kevin Evans" ],
     "description": "Tools for working with NationBuilder exports using NationBuilder.Connect.Client",
-    "version": "1.0.0-*",
+    "version": "1.0.1",
     "packOptions": {
         "owners": [ "Proximity Mobile" ],
         "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
@@ -16,7 +16,7 @@
     },
     "dependencies": {
         "CsvHelper": "2.16.3",
-        "NationBuilderConnect.Client": "1.0.0-*"
+        "NationBuilderConnect.Client": "1.0.8"
     },
     "frameworks": {
         "net40": {
@@ -42,28 +42,6 @@
             },
             "frameworkAssemblies": {
                 "System.Net.Http": "4.0.0.0"
-            }
-        },
-        "netstandard1.3": {
-            "buildOptions": {
-                "define": [ "NETSTANDARD" ]
-            },
-            "dependencies": {
-                "NETStandard.Library": "1.6.0",
-                "Microsoft.CSharp": "4.0.1",
-                "System.Reflection.TypeExtensions": "4.1.0"
-            }
-        },
-        "netcoreapp1.5": {
-            "buildOptions": {
-                "define": [ "NETCORE" ]
-            },
-            "dependencies": {
-                "Microsoft.NETCore.App": {
-                    "type": "platform",
-                    "version": "1.0.0"
-                },
-                "System.Net.Http": "4.3.0"
             }
         }
     }

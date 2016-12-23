@@ -1163,11 +1163,10 @@ namespace NationBuilderConnect.Model
         public byte? TurnoutProbabilityScore { get; private set; }
 
         /// <summary>
-        ///     this person’s location based on their Twitter profile
+        ///     an address resource representing this person’s address based on Twitter’s location data
         /// </summary>
-        /// Removed because I can't figure out what type this is
-        //[JsonProperty("twitter_address")]
-        //public Address TwitterAddress { get; private set; }
+        [JsonProperty("twitter_address")]
+        public Address TwitterAddress { get; private set; }
 
         /// <summary>
         ///     the description that this person provided in their Twitter profile
@@ -1194,10 +1193,10 @@ namespace NationBuilderConnect.Model
         public long? TwitterId { get; private set; }
 
         /// <summary>
-        ///     an address resource representing this person’s address based on Twitter’s location data
+        ///     this person’s location based on their Twitter profile
         /// </summary>
         [JsonProperty("twitter_location")]
-        public Address TwitterLocation { get; private set; }
+        public string TwitterLocation { get; private set; }
 
         /// <summary>
         ///     this person’s Twitter login name
