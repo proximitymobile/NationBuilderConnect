@@ -16,8 +16,13 @@
         Queued = 1,
 
         /// <summary>
+        ///     Working
+        /// </summary>
+        Working = 2,
+
+        /// <summary>
         ///     Completed
         /// </summary>
-        Completed = 2
+        Completed = 3
     }
 }

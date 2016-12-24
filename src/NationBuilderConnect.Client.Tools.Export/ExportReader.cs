@@ -57,42 +57,42 @@ namespace NationBuilderConnect.Client.Tools.Export
             }
         }
 
-        public Task<CsvFileEnumerable<ExportedPerson>> ExportAndGetPeopleFromListAsync(int listId, string downloadDir,
-            Func<int, string> createFileName, TimeSpan timeToWaitForExport,
+        public Task<CsvFileEnumerable<ExportedPerson>> ExportAndGetPeopleFromListAsync(int listId, 
+            TimeSpan? exportTimeout = null, string downloadDir = null, Func<int, string> createFileName = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             return ExportAndGetRecordsFromListAsync<ExportedPerson>(listId, downloadDir, ExportContext.People,
-                createFileName, timeToWaitForExport, cancellationToken);
+                createFileName, exportTimeout, cancellationToken);
         }
 
         public Task<CsvFileEnumerable<ExportedHousehold>> ExportAndGetHouseholdsFromListAsync(int listId,
-            string downloadDir, Func<int, string> createFileName, TimeSpan timeToWaitForExport,
+            TimeSpan? exportTimeout = null, string downloadDir = null, Func<int, string> createFileName = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             return ExportAndGetRecordsFromListAsync<ExportedHousehold>(listId, downloadDir, ExportContext.Households,
-                createFileName, timeToWaitForExport, cancellationToken);
+                createFileName, exportTimeout, cancellationToken);
         }
 
-        public CsvFileEnumerable<ExportedPerson> ExportAndGetPeopleFromList(int listId, string downloadDir,
-            Func<int, string> createFileName, TimeSpan timeToWaitForExport,
+        public CsvFileEnumerable<ExportedPerson> ExportAndGetPeopleFromList(int listId,
+            TimeSpan? exportTimeout = null, string downloadDir = null, Func<int, string> createFileName = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             return ExportAndGetRecordsFromList<ExportedPerson>(listId, downloadDir, ExportContext.People,
-                createFileName, timeToWaitForExport, cancellationToken);
+                createFileName, exportTimeout, cancellationToken);
         }
 
-        public CsvFileEnumerable<ExportedHousehold> ExportAndGetHouseholdsFromList(int listId, string downloadDir,
-            Func<int, string> createFileName, TimeSpan timeToWaitForExport,
+        public CsvFileEnumerable<ExportedHousehold> ExportAndGetHouseholdsFromList(int listId,
+            TimeSpan? exportTimeout = null, string downloadDir = null, Func<int, string> createFileName = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             return ExportAndGetRecordsFromList<ExportedHousehold>(listId, downloadDir, ExportContext.Households,
-                createFileName, timeToWaitForExport, cancellationToken);
+                createFileName, exportTimeout, cancellationToken);
         }
 
         private static Task DelayAsync(TimeSpan timeSpan)
         {
             var tcs = new TaskCompletionSource<object>();
-            new Timer(_ => tcs.SetResult(null)).Change((int) timeSpan.TotalMilliseconds, -1);
+            new Timer(_ => tcs.SetResult(null), null, Timeout.Infinite, Timeout.Infinite).Change((int) timeSpan.TotalMilliseconds, Timeout.Infinite);
             return tcs.Task;
         }
 
@@ -127,17 +127,17 @@ namespace NationBuilderConnect.Client.Tools.Export
         }
 
         private CsvFileEnumerable<TRecord> ExportAndGetRecordsFromList<TRecord>(int listId,
-            string downloadDir,
-            ExportContext context, Func<int, string> createFileName, TimeSpan timeToWaitForExport,
+            string downloadDir, ExportContext context, Func<int, string> createFileName, TimeSpan? exportTimeout,
             CancellationToken cancellationToken) where TRecord : CsvRecord
         {
             int? exportId = null;
+            var exportTimeoutNotNull = exportTimeout ?? TimeSpan.FromMinutes(5);
 
             try
             {
                 var export = _exportService.Create(listId, context, cancellationToken);
                 exportId = export.Id;
-                var isReady = WaitForExportToFinish(exportId.Value, timeToWaitForExport, cancellationToken);
+                var isReady = WaitForExportToFinish(exportId.Value, exportTimeoutNotNull, cancellationToken);
                 if (!isReady) throw new ExportIsNotCompleteException(exportId.Value);
                 return GetExportedRecords<TRecord>(exportId.Value, downloadDir,
                     createFileName?.Invoke(exportId.Value), cancellationToken);
@@ -151,16 +151,17 @@ namespace NationBuilderConnect.Client.Tools.Export
 
         private async Task<CsvFileEnumerable<TRecord>> ExportAndGetRecordsFromListAsync<TRecord>(int listId,
             string downloadDir,
-            ExportContext context, Func<int, string> createFileName, TimeSpan timeToWaitForExport,
+            ExportContext context, Func<int, string> createFileName, TimeSpan? exportTimeout,
             CancellationToken cancellationToken) where TRecord : CsvRecord
         {
             int? exportId = null;
+            var exportTimeoutNotNull = exportTimeout ?? TimeSpan.FromMinutes(5);
 
             try
             {
                 var export = await _exportService.CreateAsync(listId, context, cancellationToken);
                 exportId = export.Id;
-                var isReady = await WaitForExportToFinishAsync(exportId.Value, timeToWaitForExport, cancellationToken);
+                var isReady = await WaitForExportToFinishAsync(exportId.Value, exportTimeoutNotNull, cancellationToken);
                 if (!isReady) throw new ExportIsNotCompleteException(exportId.Value);
                 return await
                     GetExportedRecordsAsync<TRecord>(exportId.Value, downloadDir,
@@ -173,13 +174,13 @@ namespace NationBuilderConnect.Client.Tools.Export
             }
         }
 
-        private static CsvConfiguration GetCsvConfiguration<TRecord>()
+        private static CsvConfiguration GetCsvConfiguration<TRecord>() where TRecord : CsvRecord
         {
             if (typeof(TRecord) == typeof(ExportedHousehold))
             {
-                var householdCOnfig = new CsvConfiguration {HasHeaderRecord = true, DetectColumnCountChanges = false};
-                householdCOnfig.RegisterClassMap<ExportedHouseholdMap>();
-                return householdCOnfig;
+                var householdConfig = new CsvConfiguration {HasHeaderRecord = true, DetectColumnCountChanges = false};
+                householdConfig.RegisterClassMap<ExportedHouseholdMap>();
+                return householdConfig;
             }
 
             var personConfig = new CsvConfiguration {HasHeaderRecord = true, DetectColumnCountChanges = false};
@@ -202,6 +203,8 @@ namespace NationBuilderConnect.Client.Tools.Export
         private async Task<CsvFileEnumerable<TRecord>> GetExportedRecordsAsync<TRecord>(int exportId, string downloadDir,
             string fileName, CancellationToken cancellationToken) where TRecord : CsvRecord
         {
+            downloadDir = downloadDir ?? Path.GetTempPath();
+
             Ensure.IsNotNullOrWhitespace(downloadDir, nameof(downloadDir));
             if (!Directory.Exists(downloadDir)) throw new ArgumentException("Download directory does not exist");
 
@@ -209,17 +212,16 @@ namespace NationBuilderConnect.Client.Tools.Export
 
             if (export == null) throw new ExportDoesNotExistException(exportId);
             if (export.Status != ExportStatus.Completed) throw new ExportIsNotCompleteException(exportId);
-
+            
             fileName = !string.IsNullOrWhiteSpace(fileName)
                 ? fileName
-                : DateTime.UtcNow.ToString($"NB-{exportId}-yyyyMMddHHmm-{Guid.NewGuid()}.csv");
+                : GetDefaultCsvFileName(exportId);
 
             var filePath = Path.Combine(downloadDir, fileName);
 
             if (File.Exists(filePath)) throw new InvalidOperationException($"File already exists: {filePath}");
 
             await DownloadFileAsync(export.DownloadUrl, filePath, cancellationToken);
-
             var configuration = GetCsvConfiguration<TRecord>();
             return new CsvFileEnumerable<TRecord>(filePath, configuration, cancellationToken);
         }
@@ -241,6 +243,8 @@ namespace NationBuilderConnect.Client.Tools.Export
         private CsvFileEnumerable<TRecord> GetExportedRecords<TRecord>(int exportId, string downloadDir,
             string fileName, CancellationToken cancellationToken) where TRecord : CsvRecord
         {
+            downloadDir = downloadDir ?? Path.GetTempPath();
+
             Ensure.IsNotNullOrWhitespace(downloadDir, nameof(downloadDir));
             if (!Directory.Exists(downloadDir)) throw new ArgumentException("Download directory does not exist");
 
@@ -251,16 +255,20 @@ namespace NationBuilderConnect.Client.Tools.Export
 
             fileName = !string.IsNullOrWhiteSpace(fileName)
                 ? fileName
-                : DateTime.UtcNow.ToString($"NB-{exportId}-yyyyMMddHHmm-{Guid.NewGuid()}.csv");
+                : GetDefaultCsvFileName(exportId);
 
             var filePath = Path.Combine(downloadDir, fileName);
 
             if (File.Exists(filePath)) throw new InvalidOperationException($"File already exists: {filePath}");
 
             DownloadFile(export.DownloadUrl, filePath, cancellationToken);
-
             var configuration = GetCsvConfiguration<TRecord>();
             return new CsvFileEnumerable<TRecord>(filePath, configuration, cancellationToken);
+        }
+
+        private static string GetDefaultCsvFileName(int exportId)
+        {
+            return $"NB-{exportId}-{DateTime.UtcNow:yyyyMMddHHmm}-{Guid.NewGuid()}.csv";
         }
     }
 }

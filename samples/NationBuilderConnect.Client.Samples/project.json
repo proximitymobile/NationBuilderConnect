@@ -9,7 +9,8 @@
             "type": "platform",
             "version": "1.1.0"
         },
-        "NationBuilderConnect.Client": "1.0.0-*"
+        "NationBuilderConnect.Client": "1.0.0-*",
+"NationBuilderConnect.Client.Tools.Export": "1.0.2"
     },
 
   "frameworks": {

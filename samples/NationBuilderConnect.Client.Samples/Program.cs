@@ -1,5 +1,4 @@
-﻿using NationBuilderConnect.Client.Samples.Services;
-using NationBuilderConnect.Client.Utilities.Auth;
+﻿using NationBuilderConnect.Client.Utilities.Auth;
 
 namespace NationBuilderConnect.Client.Samples
 {
@@ -15,13 +14,17 @@ namespace NationBuilderConnect.Client.Samples
                 //cfg.WithDefaultCredentials(new OAuthCredentials("YOUR_OAUTH_TOKEN"));
             });
 
-            var listSamples = new ListSamples();
-            var peopleSamples = new PeopleSamples();
+            var listSamples = new ListServiceSamples();
+            var peopleSamples = new PeopleServiceSamples();
+            var exportToolsSamples = new ExportToolsSamples();
 
             // WARNING - Do not run these on a production nation.
             // These samples will modify data
             //listSamples.Run();
             //peopleSamples.Run();
+            //exportToolsSamples.ExportListAsHouseholds(21);
+            //exportToolsSamples.ExportListAsPeople(21);
+
         }
     }
 }

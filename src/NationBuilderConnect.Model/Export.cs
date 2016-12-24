@@ -20,10 +20,10 @@ namespace NationBuilderConnect.Model
         public string Type { get; private set; }
 
         /// <summary>
-        ///     The export context
+        ///     The export context as a string. Use the Context property to get the context as an enum
         /// </summary>
         [JsonProperty("context")]
-        public string Context { get; private set; }
+        public string ContextName { get; private set; }
 
         /// <summary>
         ///     The status object returned from the server
@@ -37,6 +37,11 @@ namespace NationBuilderConnect.Model
         public ExportStatus Status => GetStatus();
 
         /// <summary>
+        ///     The context as represented by an <see cref="ExportContext" /> enum
+        /// </summary>
+        public ExportContext Context => GetContext();
+
+        /// <summary>
         ///     The URL at which the export can be downloaded
         /// </summary>
         [JsonProperty("download_url")]
@@ -48,7 +53,17 @@ namespace NationBuilderConnect.Model
             var nameUpper = StatusObject.Name.ToUpperInvariant();
             if (string.Equals("COMPLETED", nameUpper)) return ExportStatus.Completed;
             if (string.Equals("QUEUED", nameUpper)) return ExportStatus.Queued;
+            if (string.Equals("WORKING", nameUpper)) return ExportStatus.Working;
             return ExportStatus.Unknown;
+        }
+
+        private ExportContext GetContext()
+        {
+            if (string.IsNullOrWhiteSpace(ContextName)) return ExportContext.Unknown;
+            var nameUpper = ContextName.ToUpperInvariant();
+            if (string.Equals("HOUSEHOLDS", nameUpper)) return ExportContext.Households;
+            if (string.Equals("PEOPLE", nameUpper)) return ExportContext.People;
+            return ExportContext.Unknown;
         }
 
         /// <summary>
@@ -61,6 +76,18 @@ namespace NationBuilderConnect.Model
             /// </summary>
             [JsonProperty("name")]
             public string Name { get; private set; }
+
+            /// <summary>
+            ///     The number of records that have been processed
+            /// </summary>
+            [JsonProperty("processed")]
+            public int NumberRecordsProcessed { get; private set; }
+
+            /// <summary>
+            ///     The total number of records that need to be processed
+            /// </summary>
+            [JsonProperty("total")]
+            public int NumberRecordsTotal { get; private set; }
         }
     }
 }

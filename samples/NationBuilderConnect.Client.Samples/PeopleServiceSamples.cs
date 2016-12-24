@@ -7,15 +7,15 @@ using NationBuilderConnect.Client.Services.Parameters;
 using NationBuilderConnect.Client.Utilities;
 using NationBuilderConnect.Model;
 
-namespace NationBuilderConnect.Client.Samples.Services
+namespace NationBuilderConnect.Client.Samples
 {
-    public class PeopleSamples
+    public class PeopleServiceSamples
     {
         public async Task RunAsync()
         {
             using (var service = new PersonService())
             {
-                string firstName = "Test", lastName = $"Person{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}";
+                string firstName = "Test", lastName = $"Person{DateTime.UtcNow:yyyyMMddHHmmss}";
 
                 var update = new PersonUpdate
                 {

@@ -5,9 +5,9 @@ using NationBuilderConnect.Client.Services;
 using NationBuilderConnect.Client.Services.Parameters;
 using NationBuilderConnect.Client.Utilities;
 
-namespace NationBuilderConnect.Client.Samples.Services
+namespace NationBuilderConnect.Client.Samples
 {
-    public class ListSamples
+    public class ListServiceSamples
     {
         public async Task RunAsync()
         {

@@ -62,6 +62,7 @@ namespace NationBuilderConnect.Client.Tools.Export
             if (_disposed) return;
             _disposed = true;
             _reader?.Dispose();
+            if(!string.IsNullOrWhiteSpace(_filePath) && File.Exists(_filePath)) File.Delete(_filePath);
         }
 
         public bool MoveNext()
@@ -69,8 +70,6 @@ namespace NationBuilderConnect.Client.Tools.Export
             ThrowIfDisposed();
             _cancellationToken.ThrowIfCancellationRequested();
             _started = true;
-            InitializeReaderIfNeeded();
-
             InitializeReaderIfNeeded();
 
             if (!_reader.Read())
@@ -109,6 +108,7 @@ namespace NationBuilderConnect.Client.Tools.Export
 
         private void InitializeReaderIfNeeded()
         {
+            if (_reader != null) return;
             if (!File.Exists(_filePath)) throw new InvalidOperationException($"File does not exist: {_filePath}");
             if (!string.Equals(Path.GetExtension(_filePath), ".csv", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException($"File must be .csv: {_filePath}");
@@ -119,7 +119,7 @@ namespace NationBuilderConnect.Client.Tools.Export
         {
             var map = reader.Configuration.Maps.Find<TItem>();
             return
-                reader.FieldHeaders.Where(h => map.PropertyMaps.All(pm => pm.Data.Property.Name != h))
+                reader.FieldHeaders.Where(h => map.PropertyMaps.All(pm => !pm.Data.Names.Names.Contains(h)))
                     .Distinct()
                     .ToList();
         }

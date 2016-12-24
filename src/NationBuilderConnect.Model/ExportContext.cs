@@ -6,6 +6,11 @@
     public enum ExportContext
     {
         /// <summary>
+        ///     Unknown type
+        /// </summary>
+        Unknown = 0,
+
+        /// <summary>
         ///     Export by person
         /// </summary>
         People = 1,
