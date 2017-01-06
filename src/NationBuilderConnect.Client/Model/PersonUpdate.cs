@@ -86,13 +86,13 @@ namespace NationBuilderConnect.Client.Model
         ///     this is a boolean flag that lets us know if this person is on a do not call list
         /// </summary>
         [JsonProperty("do_not_call")]
-        public bool DoNotCall { get; set; }
+        public bool? DoNotCall { get; set; }
 
         /// <summary>
         ///     this is a boolean flag that lets us know if this person is on a do not contact list
         /// </summary>
         [JsonProperty("do_not_contact")]
-        public bool DoNotContact { get; set; }
+        public bool? DoNotContact { get; set; }
 
         /// <summary>
         ///     this person’s ID from Catalist
@@ -113,6 +113,12 @@ namespace NationBuilderConnect.Client.Model
         public string Email { get; set; }
 
         /// <summary>
+        ///     boolean representing whether this person has opted-in to email correspondence
+        /// </summary>
+        [JsonProperty("email_opt_in")]
+        public bool? EmailOptIn { get; set; }
+
+        /// <summary>
         ///     an email address for this person
         /// </summary>
         [JsonProperty("email1")]
@@ -122,7 +128,7 @@ namespace NationBuilderConnect.Client.Model
         ///     boolean indicating if email1 for this person is bad
         /// </summary>
         [JsonProperty("email1_is_bad")]
-        public bool Email1IsBad { get; set; }
+        public bool? Email1IsBad { get; set; }
 
         /// <summary>
         ///     an email address for this person
@@ -134,7 +140,7 @@ namespace NationBuilderConnect.Client.Model
         ///     boolean indicating if email2 for this person is bad
         /// </summary>
         [JsonProperty("email2_is_bad")]
-        public bool Email2IsBad { get; set; }
+        public bool? Email2IsBad { get; set; }
 
         /// <summary>
         ///     an email address for this person
@@ -146,7 +152,7 @@ namespace NationBuilderConnect.Client.Model
         ///     boolean indicating if email3 for this person is bad
         /// </summary>
         [JsonProperty("email3_is_bad")]
-        public bool Email3IsBad { get; set; }
+        public bool? Email3IsBad { get; set; }
 
         /// <summary>
         ///     an email address for this person
@@ -158,7 +164,7 @@ namespace NationBuilderConnect.Client.Model
         ///     boolean indicating if email4 for this person is bad
         /// </summary>
         [JsonProperty("email4_is_bad")]
-        public bool Email4IsBad { get; set; }
+        public bool? Email4IsBad { get; set; }
 
         /// <summary>
         ///     the name of the company for which this person works
@@ -194,7 +200,7 @@ namespace NationBuilderConnect.Client.Model
         ///     boolean value indicating if this user is on the U.S. Federal Do Not Call list
         /// </summary>
         [JsonProperty("federal_donotcall")]
-        public bool FederalDoNotCall { get; set; }
+        public bool? FederalDoNotCall { get; set; }
 
         /// <summary>
         ///     district field
@@ -411,6 +417,12 @@ namespace NationBuilderConnect.Client.Model
         /// </summary>
         [JsonProperty("mobile")]
         public string MobilePhoneNumber { get; set; }
+
+        /// <summary>
+        ///     a boolean representing whether the person has opted-in to mobile correspondence
+        /// </summary>
+        [JsonProperty("mobile_opt_in")]
+        public bool? MobileOptIn { get; set; }
 
         /// <summary>
         ///     this person’s ID from the NationBuilder Election Center

@@ -19,6 +19,13 @@ namespace NationBuilderConnect.Client.Utilities
         }
 
         /// <inheritDoc/>
+        public string GetV1ContactTypeIndexUrl(short pageSize, PagingTokens pagingTokens)
+        {
+            var queryValues = CreateQueryStringValues(pageSize, pagingTokens);
+            return "api/v1/settings/contact_types" + queryValues.ToString(true);
+        }
+
+        /// <inheritDoc/>
         public virtual string GetV1PersonCountUrl()
         {
             return "api/v1/people/count";

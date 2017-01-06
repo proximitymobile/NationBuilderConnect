@@ -40,6 +40,14 @@ namespace NationBuilderConnect.Client.Utilities
         string GetV1PersonIndexUrl(short pageSize, PagingTokens pagingTokens);
 
         /// <summary>
+        ///     Gets the relative URL for the contact type index method
+        /// </summary>
+        /// <param name="pageSize">The number of items to return from the server per page of results</param>
+        /// <param name="pagingTokens">Paging values</param>
+        /// <returns>The relative URL for the contact type index method</returns>
+        string GetV1ContactTypeIndexUrl(short pageSize, PagingTokens pagingTokens);
+
+        /// <summary>
         ///     Gets the relative URL for the people count method
         /// </summary>
         /// <returns>The relative URL for the people count method</returns>
