@@ -2,7 +2,7 @@
     "title": "NationBuilderConnect.Client.Tools.Export",
     "authors": [ "Kevin Evans" ],
     "description": "Tools for working with NationBuilder exports using NationBuilder.Connect.Client",
-    "version": "1.0.4",
+    "version": "1.0.6",
     "packOptions": {
         "owners": [ "Proximity Mobile" ],
         "projectUrl": "https://github.com/proximitymobile/NationBuilderConnect",
