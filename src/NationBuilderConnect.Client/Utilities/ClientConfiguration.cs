@@ -7,8 +7,6 @@ namespace NationBuilderConnect.Client.Utilities
     {
         public const short DefaultPageSize = 20;
 
-        public RequestOptions RequestOptions { get; private set; }
-
         public ClientConfiguration()
         {
             RequestOptions = new RequestOptions
@@ -19,39 +17,47 @@ namespace NationBuilderConnect.Client.Utilities
             };
         }
 
+        public RequestOptions RequestOptions { get; }
         public IUrlProvider UrlProvider { get; private set; }
+        public IConnectClientLogger Logger { get; private set; }
 
-        /// <inheritDoc/>
+        /// <inheritDoc />
         public void WithDefaultNationSlug(string nationSlug)
         {
             RequestOptions.NationSlug = nationSlug;
         }
 
-        /// <inheritDoc/>
+        /// <inheritDoc />
         public void WithDefaultRequestTimeout(TimeSpan timeout)
         {
             RequestOptions.Timeout = timeout;
         }
 
-        /// <inheritDoc/>
+        /// <inheritDoc />
         public void WithUrlProvider(IUrlProvider provider)
         {
             UrlProvider = provider;
         }
 
-        /// <inheritDoc/>
+        /// <inheritDoc />
         public void WithRetriesWhenRateLimitHit(short number)
         {
             RequestOptions.RateLimitRetries = number;
         }
 
-        /// <inheritDoc/>
+        /// <inheritDoc />
         public void WithDefaultResultsPageSize(short pageSize)
         {
             RequestOptions.ResultsPageSize = pageSize;
         }
 
-        /// <inheritDoc/>
+        /// <inheritDoc />
+        public void WithLogger(IConnectClientLogger logger)
+        {
+            Logger = logger;
+        }
+
+        /// <inheritDoc />
         public void WithDefaultCredentials(ICredentials credentials)
         {
             RequestOptions.Credentials = credentials;

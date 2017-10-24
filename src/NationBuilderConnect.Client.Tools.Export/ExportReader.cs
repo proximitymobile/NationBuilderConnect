@@ -14,6 +14,7 @@ namespace NationBuilderConnect.Client.Tools.Export
     {
         private readonly ExportService _exportService;
         private readonly HttpClient _httpClient;
+        private static readonly TimeSpan TimeToWaitOnExportBeforeTryingAgain = TimeSpan.FromSeconds(30);
 
         public ExportReader(RequestOptions requestOptions = null)
         {
@@ -57,7 +58,7 @@ namespace NationBuilderConnect.Client.Tools.Export
             }
         }
 
-        public Task<CsvFileEnumerable<ExportedPerson>> ExportAndGetPeopleFromListAsync(int listId, 
+        public Task<CsvFileEnumerable<ExportedPerson>> ExportAndGetPeopleFromListAsync(int listId,
             TimeSpan? exportTimeout = null, string downloadDir = null, Func<int, string> createFileName = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -89,13 +90,6 @@ namespace NationBuilderConnect.Client.Tools.Export
                 createFileName, exportTimeout, cancellationToken);
         }
 
-        private static Task DelayAsync(TimeSpan timeSpan)
-        {
-            var tcs = new TaskCompletionSource<object>();
-            new Timer(_ => tcs.SetResult(null), null, Timeout.Infinite, Timeout.Infinite).Change((int) timeSpan.TotalMilliseconds, Timeout.Infinite);
-            return tcs.Task;
-        }
-
         private async Task<bool> WaitForExportToFinishAsync(int exportId, TimeSpan timeToWaitForExport,
             CancellationToken cancellationToken)
         {
@@ -103,11 +97,16 @@ namespace NationBuilderConnect.Client.Tools.Export
 
             while (true)
             {
-                await DelayAsync(TimeSpan.FromSeconds(5));
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} - waiting {TimeToWaitOnExportBeforeTryingAgain}");
+                await Task.Delay(TimeToWaitOnExportBeforeTryingAgain, cancellationToken);
                 var waitedAlready = DateTime.UtcNow - whenStart;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} - waited already {waitedAlready}");
                 if (waitedAlready > timeToWaitForExport) return false;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Check export {exportId}");
                 var export = await _exportService.ShowAsync(exportId, cancellationToken);
-                if ((export != null) && (export.Status == ExportStatus.Completed)) return true;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} is {export?.Status}");
+                if (export != null && export.Status == ExportStatus.Completed) return true;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} not done: {export?.Status}");
             }
         }
 
@@ -118,11 +117,16 @@ namespace NationBuilderConnect.Client.Tools.Export
 
             while (true)
             {
-                DelayAsync(TimeSpan.FromSeconds(5)).Wait(cancellationToken);
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} - waiting {TimeToWaitOnExportBeforeTryingAgain}");
+                Task.Delay(TimeToWaitOnExportBeforeTryingAgain, cancellationToken).Wait(cancellationToken);
                 var waitedAlready = DateTime.UtcNow - whenStart;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} - waited already {waitedAlready}");
                 if (waitedAlready > timeToWaitForExport) return false;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Check export {exportId}");
                 var export = _exportService.Show(exportId, cancellationToken);
-                if ((export != null) && (export.Status == ExportStatus.Completed)) return true;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} is {export?.Status}");
+                if (export != null && export.Status == ExportStatus.Completed) return true;
+                ConnectClient.Logger.Trace($"ExportReader-WaitForExportToFinish: Export {exportId} not done: {export?.Status}");
             }
         }
 
@@ -136,9 +140,21 @@ namespace NationBuilderConnect.Client.Tools.Export
             try
             {
                 var export = _exportService.Create(listId, context, cancellationToken);
+
+                ConnectClient.Logger.Trace($"ExportReader-ExportAndGetRecordsFromList: Export {export.Id} created");
+
                 exportId = export.Id;
+
                 var isReady = WaitForExportToFinish(exportId.Value, exportTimeoutNotNull, cancellationToken);
-                if (!isReady) throw new ExportIsNotCompleteException(exportId.Value);
+
+                if (!isReady)
+                {
+                    ConnectClient.Logger.Trace($"ExportReader-ExportAndGetRecordsFromList: Export {exportId} not ready in time");
+                    throw new ExportIsNotCompleteException(exportId.Value);
+                }
+
+                ConnectClient.Logger.Trace($"ExportReader-ExportAndGetRecordsFromList: Export {exportId} ready");
+
                 return GetExportedRecords<TRecord>(exportId.Value, downloadDir,
                     createFileName?.Invoke(exportId.Value), cancellationToken);
             }
@@ -160,11 +176,20 @@ namespace NationBuilderConnect.Client.Tools.Export
             try
             {
                 var export = await _exportService.CreateAsync(listId, context, cancellationToken);
+
+                ConnectClient.Logger.Trace($"ExportReader-ExportAndGetRecordsFromListAsync: Export {export.Id} created");
+
                 exportId = export.Id;
                 var isReady = await WaitForExportToFinishAsync(exportId.Value, exportTimeoutNotNull, cancellationToken);
-                if (!isReady) throw new ExportIsNotCompleteException(exportId.Value);
-                return await
-                    GetExportedRecordsAsync<TRecord>(exportId.Value, downloadDir,
+                if (!isReady)
+                {
+                    ConnectClient.Logger.Trace($"ExportReader-ExportAndGetRecordsFromListAsync: Export {exportId} not ready in time");
+                    throw new ExportIsNotCompleteException(exportId.Value);
+                }
+
+                ConnectClient.Logger.Trace($"ExportReader-ExportAndGetRecordsFromListAsync: Export {exportId} ready");
+
+                return await GetExportedRecordsAsync<TRecord>(exportId.Value, downloadDir,
                         createFileName?.Invoke(exportId.Value), cancellationToken);
             }
             finally
@@ -200,8 +225,8 @@ namespace NationBuilderConnect.Client.Tools.Export
             return GetExportedRecordsAsync<ExportedHousehold>(exportId, downloadDir, fileName, cancellationToken);
         }
 
-        private async Task<CsvFileEnumerable<TRecord>> GetExportedRecordsAsync<TRecord>(int exportId, string downloadDir,
-            string fileName, CancellationToken cancellationToken) where TRecord : CsvRecord
+        private async Task<CsvFileEnumerable<TRecord>> GetExportedRecordsAsync<TRecord>(int exportId,
+            string downloadDir, string fileName, CancellationToken cancellationToken) where TRecord : CsvRecord
         {
             downloadDir = downloadDir ?? Path.GetTempPath();
 
@@ -212,7 +237,7 @@ namespace NationBuilderConnect.Client.Tools.Export
 
             if (export == null) throw new ExportDoesNotExistException(exportId);
             if (export.Status != ExportStatus.Completed) throw new ExportIsNotCompleteException(exportId);
-            
+
             fileName = !string.IsNullOrWhiteSpace(fileName)
                 ? fileName
                 : GetDefaultCsvFileName(exportId);
@@ -258,6 +283,8 @@ namespace NationBuilderConnect.Client.Tools.Export
                 : GetDefaultCsvFileName(exportId);
 
             var filePath = Path.Combine(downloadDir, fileName);
+
+            ConnectClient.Logger.Trace($"ExportReader-GetExportedRecords: Export {exportId} - getting records from {filePath}");
 
             if (File.Exists(filePath)) throw new InvalidOperationException($"File already exists: {filePath}");
 

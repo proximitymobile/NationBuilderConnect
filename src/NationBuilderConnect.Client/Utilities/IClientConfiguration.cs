@@ -44,5 +44,11 @@ namespace NationBuilderConnect.Client.Utilities
         /// </summary>
         /// <param name="pageSize">The page size. Defaults to 20 if not provided.</param>
         void WithDefaultResultsPageSize(short pageSize);
+
+        /// <summary>
+        ///     Sets the logger to be used by the client
+        /// </summary>
+        /// <param name="logger">The logger. Defaults to no logger if not provided.</param>
+        void WithLogger(IConnectClientLogger logger);
     }
 }

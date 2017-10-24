@@ -25,6 +25,11 @@ namespace NationBuilderConnect.Client
         internal static IUrlProvider UrlProvider { get; private set; }
 
         /// <summary>
+        ///     The URL provider that is used for each request
+        /// </summary>
+        internal static IConnectClientLogger Logger { get; private set; }
+
+        /// <summary>
         ///     Initializes the client
         /// </summary>
         /// <param name="action">The configuration action</param>
@@ -37,6 +42,7 @@ namespace NationBuilderConnect.Client
             DefaultRequestOptions = clientConfiguration.RequestOptions;
 
             UrlProvider = clientConfiguration.UrlProvider ?? new UrlProvider();
+            Logger = clientConfiguration.Logger ?? new DefaultConnectClientLogger();
 
             IsInitialized = true;
         }

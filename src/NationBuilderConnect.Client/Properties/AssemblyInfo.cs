@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 #if DEBUG
@@ -14,10 +15,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Proximity Mobile 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.0.*")]
+//[assembly: AssemblyVersion("1.0.*")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
 #if !PCL
 [assembly: NeutralResourcesLanguage("en")]
 #endif
+
+[assembly:InternalsVisibleTo("NationBuilderConnect.Client.Tools.Export")]
